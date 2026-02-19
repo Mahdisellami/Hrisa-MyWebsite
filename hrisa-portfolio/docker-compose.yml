@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # Development service
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: hrisa-portfolio-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount source code for hot reload
+      - .:/app
+      # Use named volumes for node_modules (prevent overwriting)
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      - WATCHPACK_POLLING=true
+    stdin_open: true
+    tty: true
+    networks:
+      - hrisa-network
+
+  # Production service (for testing production build locally)
+  prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hrisa-portfolio-prod
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - hrisa-network
+    profiles:
+      - production
+
+networks:
+  hrisa-network:
+    driver: bridge
