@@ -48,19 +48,33 @@ export default function TheatrePage() {
             </p>
           </div>
 
-          {/* Info Box */}
-          <div className="mb-12 p-6 bg-red-50 border-2 border-red-200 rounded-xl">
-            <div className="flex items-center gap-3 mb-3">
-              <Sparkles className="w-6 h-6 text-red-600" />
-              <h2 className="text-xl font-display font-bold text-sand-950">
-                Content Coming Soon
-              </h2>
-            </div>
-            <p className="text-sand-700">
-              I'm collecting photos and memories from various productions, rehearsals, and performances.
-              Check back for stories from the stage!
+          {/* Performance Videos */}
+          <section className="mb-12">
+            <h2 className="text-3xl font-display font-bold text-sand-950 mb-6">
+              Performance Videos
+            </h2>
+            <p className="text-sand-600 mb-6">
+              A collection of theatre performances showcasing various roles and productions.
             </p>
-          </div>
+
+            {/* YouTube Playlist Embed */}
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl border-2 border-sand-200">
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src="https://www.youtube.com/embed/videoseries?list=PLC8zhGjglfk2_KiMwGDfTekDDclGG6zDt"
+                title="Theatre Performance Playlist"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+
+            <div className="mt-4 p-4 bg-red-50 rounded-lg border border-red-200">
+              <p className="text-sm text-sand-700">
+                <strong>Featured Productions:</strong> A selection of performances including classical and contemporary theatre.
+                Use the playlist controls to browse through different performances.
+              </p>
+            </div>
+          </section>
 
           {/* Skills Developed */}
           <section className="mb-12">
