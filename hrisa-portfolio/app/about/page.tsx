@@ -1,12 +1,11 @@
+'use client';
+
 import { bio, socialLinks, careerHighlights, interests } from '@/data/about';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { MapPin, Mail, Linkedin, Github, Instagram, Download, Heart, Globe, Briefcase, GraduationCap } from 'lucide-react';
-
-export const metadata = {
-  title: 'About | Mahdi Sellami',
-  description: bio.shortBio,
-};
+import Image from 'next/image';
+import { useState } from 'react';
 
 const iconMap: Record<string, any> = {
   Mail,
@@ -16,6 +15,8 @@ const iconMap: Record<string, any> = {
 };
 
 export default function AboutPage() {
+  const [profileImageError, setProfileImageError] = useState(false);
+  const profileImagePath = '/images/mahdi-profile.jpg';
   return (
     <>
       <Header />
@@ -24,13 +25,26 @@ export default function AboutPage() {
           {/* Hero Section */}
           <section className="mb-16">
             <div className="grid md:grid-cols-3 gap-8 items-start">
-              {/* Profile Image Placeholder */}
+              {/* Profile Image */}
               <div className="md:col-span-1">
-                <div className="aspect-square bg-gradient-to-br from-brand-400 to-terracotta-500 rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg">
-                  <div className="text-center">
-                    <div className="text-6xl font-display font-bold mb-2">MS</div>
-                    <div className="text-sm opacity-80">Photo coming soon</div>
-                  </div>
+                <div className="relative aspect-square rounded-2xl overflow-hidden mb-6 shadow-lg">
+                  {!profileImageError ? (
+                    <Image
+                      src={profileImagePath}
+                      alt="Mahdi Sellami"
+                      fill
+                      className="object-cover"
+                      priority
+                      onError={() => setProfileImageError(true)}
+                    />
+                  ) : (
+                    <div className="aspect-square bg-gradient-to-br from-brand-400 to-terracotta-500 flex items-center justify-center text-white">
+                      <div className="text-center">
+                        <div className="text-6xl font-display font-bold mb-2">MS</div>
+                        <div className="text-sm opacity-80">Photo coming soon</div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Availability Badge */}

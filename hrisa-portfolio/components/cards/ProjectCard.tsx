@@ -1,6 +1,10 @@
+'use client';
+
 import { ProfessionalProject } from '@/types';
 import { ArrowRight, ExternalLink, Github } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { useState } from 'react';
 
 interface ProjectCardProps {
   project: ProfessionalProject;
@@ -8,6 +12,8 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, featured = false }: ProjectCardProps) {
+  const [imageError, setImageError] = useState(false);
+
   const statusColors = {
     production: 'bg-green-100 text-green-700 border-green-200',
     beta: 'bg-blue-100 text-blue-700 border-blue-200',
@@ -30,11 +36,21 @@ export function ProjectCard({ project, featured = false }: ProjectCardProps) {
     >
       {/* Image/Visual */}
       <div className="relative h-48 bg-gradient-to-br from-brand-100 to-terracotta-100 overflow-hidden">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-6xl font-display font-bold text-brand-200/30">
-            {project.title}
+        {!imageError && project.imageUrl ? (
+          <Image
+            src={project.imageUrl}
+            alt={`${project.title} screenshot`}
+            fill
+            className="object-cover"
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-6xl font-display font-bold text-brand-200/30">
+              {project.title}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Status Badge */}
         <div className="absolute top-4 right-4">
