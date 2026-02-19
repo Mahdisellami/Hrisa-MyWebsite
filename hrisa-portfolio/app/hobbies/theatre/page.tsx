@@ -48,13 +48,48 @@ export default function TheatrePage() {
             </p>
           </div>
 
-          {/* Performance Videos */}
+          {/* Featured Performances */}
           <section className="mb-12">
             <h2 className="text-3xl font-display font-bold text-sand-950 mb-6">
-              Performance Videos
+              Featured Performances
             </h2>
             <p className="text-sand-600 mb-6">
-              A collection of theatre performances showcasing various roles and productions.
+              Highlights from various theatre productions showcasing different roles and styles.
+            </p>
+
+            {/* Featured Videos Grid */}
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              {/* Video 1 */}
+              <div className="relative aspect-video rounded-xl overflow-hidden shadow-lg border-2 border-sand-200">
+                <iframe
+                  className="absolute inset-0 w-full h-full"
+                  src="https://www.youtube.com/embed/J0FOep1civs"
+                  title="Theatre Performance 1"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+
+              {/* Video 2 */}
+              <div className="relative aspect-video rounded-xl overflow-hidden shadow-lg border-2 border-sand-200">
+                <iframe
+                  className="absolute inset-0 w-full h-full"
+                  src="https://www.youtube.com/embed/SkFiBK5d_J0"
+                  title="Theatre Performance 2"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          </section>
+
+          {/* Full Playlist */}
+          <section className="mb-12">
+            <h2 className="text-3xl font-display font-bold text-sand-950 mb-6">
+              Complete Performance Archive
+            </h2>
+            <p className="text-sand-600 mb-6">
+              Browse through the full collection of theatre performances and productions.
             </p>
 
             {/* YouTube Playlist Embed */}
@@ -70,8 +105,7 @@ export default function TheatrePage() {
 
             <div className="mt-4 p-4 bg-red-50 rounded-lg border border-red-200">
               <p className="text-sm text-sand-700">
-                <strong>Featured Productions:</strong> A selection of performances including classical and contemporary theatre.
-                Use the playlist controls to browse through different performances.
+                <strong>Full Archive:</strong> Use the playlist controls to browse through all performances including classical and contemporary theatre.
               </p>
             </div>
           </section>
