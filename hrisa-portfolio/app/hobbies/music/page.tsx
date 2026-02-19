@@ -13,14 +13,26 @@ export default function MusicPage() {
     {
       name: 'Guitar',
       icon: Guitar,
-      proficiency: 'Intermediate',
       color: 'from-purple-500 to-pink-500',
+      description: 'String instrument',
+    },
+    {
+      name: 'Oud (Arabic)',
+      icon: Music,
+      color: 'from-orange-500 to-red-500',
+      description: 'Traditional Middle Eastern lute',
+    },
+    {
+      name: 'Darbouka & Percussion',
+      icon: Mic2,
+      color: 'from-blue-500 to-cyan-500',
+      description: 'Middle Eastern drums and rhythms',
     },
     {
       name: 'Piano',
       icon: Piano,
-      proficiency: 'Beginner',
       color: 'from-indigo-500 to-purple-500',
+      description: 'Keyboard instrument',
     },
   ];
 
@@ -96,9 +108,9 @@ export default function MusicPage() {
                     <h3 className="text-xl font-display font-bold text-sand-950 mb-2">
                       {instrument.name}
                     </h3>
-                    <div className="inline-block px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-sm font-medium">
-                      {instrument.proficiency}
-                    </div>
+                    <p className="text-sm text-sand-600">
+                      {instrument.description}
+                    </p>
                   </div>
                 );
               })}
