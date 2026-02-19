@@ -1,7 +1,5 @@
 {
-  "buildCommand": "cd hrisa-portfolio && npm run build",
-  "devCommand": "cd hrisa-portfolio && npm run dev",
-  "installCommand": "cd hrisa-portfolio && npm install",
-  "framework": "nextjs",
-  "outputDirectory": "hrisa-portfolio/.next"
+  "github": {
+    "silent": true
+  }
 }
