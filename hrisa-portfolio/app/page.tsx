@@ -1,6 +1,13 @@
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { FeaturedWork } from '@/components/sections/FeaturedWork';
+import { Services } from '@/components/sections/Services';
+
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <>
+      <Header />
+      <main className="min-h-screen pt-20">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-6 py-20 bg-gradient-to-br from-sand-50 via-sand-100 to-terracotta-50">
         <div className="max-w-4xl mx-auto text-center">
@@ -99,35 +106,58 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Placeholder for Featured Work Section */}
-      <section id="featured-work" className="py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-display font-bold text-sand-950 text-center mb-4">
-            Featured Work
-          </h2>
-          <p className="text-lg text-sand-600 text-center mb-12">
-            Production AI systems and applications
-          </p>
-          <div className="text-center text-sand-500">
-            Coming soon...
-          </div>
-        </div>
-      </section>
+      {/* Featured Work Section */}
+      <FeaturedWork />
 
-      {/* Placeholder for Contact Section */}
-      <section id="contact" className="py-20 px-6 bg-sand-100">
+      {/* Services Section */}
+      <Services />
+
+      {/* Contact Section */}
+      <section id="contact" className="py-20 px-6 bg-gradient-to-br from-brand-50 via-sand-50 to-terracotta-50">
         <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-100 border border-brand-200 mb-6">
+            <span className="text-sm font-medium text-brand-700">Get in Touch</span>
+          </div>
           <h2 className="text-4xl font-display font-bold text-sand-950 mb-4">
             Let's Connect
           </h2>
-          <p className="text-lg text-sand-600 mb-8">
-            Open to freelance projects, collaborations, and new opportunities
+          <p className="text-lg text-sand-700 mb-8">
+            Open to freelance projects, collaborations, and new opportunities.
+            Whether you need help building something or want to discuss an idea,
+            I'd love to hear from you.
           </p>
-          <div className="text-center text-sand-500">
-            Contact form coming soon...
+
+          {/* Contact Options */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <a
+              href="mailto:mahdi.sellami@example.com"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-brand-500 hover:bg-brand-600 text-white rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              Send Email
+            </a>
+            <a
+              href="https://www.linkedin.com/in/mahdi-sellami-621710112/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-white hover:bg-sand-50 text-sand-900 rounded-lg font-semibold transition-all duration-300 border-2 border-sand-300 hover:border-brand-400"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              LinkedIn
+            </a>
           </div>
+
+          <p className="text-sm text-sand-600">
+            Contact form coming soon. For now, reach out via email or LinkedIn.
+          </p>
         </div>
       </section>
     </main>
+    <Footer />
+  </>
   );
 }

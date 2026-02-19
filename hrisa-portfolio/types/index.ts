@@ -114,6 +114,13 @@ export interface Bio {
   shortBio: string;
   longBio: string;
   location: string;
+  citiesLivedIn?: {
+    city: string;
+    country: string;
+    flag: string;
+    years?: string;
+    hometown?: boolean;
+  }[];
   availability: {
     freelance: boolean;
     fullTime: boolean;
