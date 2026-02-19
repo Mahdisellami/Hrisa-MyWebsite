@@ -10,13 +10,13 @@ import { useState } from 'react';
 export default function PhotographyPage() {
   const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({});
 
-  // Placeholder photo data - will show real photos when added to /public/images/photography/
-  const photos = Array.from({ length: 12 }, (_, i) => ({
+  // Photo data - 17 photos from travels and personal moments
+  const photos = Array.from({ length: 17 }, (_, i) => ({
     id: i + 1,
     filename: `photo-${String(i + 1).padStart(2, '0')}.jpg`,
     title: `Photo ${i + 1}`,
-    location: 'Add location',
-    date: '2024',
+    location: 'Travel memories',
+    date: '2024-2026',
   }));
 
   const handleImageError = (id: number) => {
@@ -56,19 +56,12 @@ export default function PhotographyPage() {
           {/* Info Box */}
           <div className="mb-12 p-6 bg-blue-50 border-2 border-blue-200 rounded-xl">
             <h2 className="text-xl font-display font-bold text-sand-950 mb-3">
-              📸 Photos Coming Soon
+              📸 Photography Gallery
             </h2>
-            <p className="text-sand-700 mb-4">
-              I'm currently curating my best shots from my travels. Check back soon to see photography from:
+            <p className="text-sand-700">
+              A collection of 17 photos capturing moments from my travels across Europe, Africa, and the Middle East.
+              Each image represents a unique perspective from the cities I've called home.
             </p>
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-2 text-sm text-sand-600">
-              <div>🇩🇪 Munich & Berlin</div>
-              <div>🇹🇳 Sfax & Tunis</div>
-              <div>🇫🇷 Paris & Marseille</div>
-              <div>🇪🇸 Madrid & Barcelona</div>
-              <div>🇵🇹 Lisbon & Porto</div>
-              <div>🇪🇬 Cairo & Alexandria</div>
-            </div>
           </div>
 
           {/* Photo Gallery Grid */}
