@@ -96,7 +96,8 @@ Beyond commerce, the platform serves a social mission: preserving centuries-old 
     imageUrl: '/images/projects/gamza-tounsia.jpg',
     links: {
       github: 'https://github.com/Mahdisellami/Ghamza-App',
-      live: 'https://www.instagram.com/gamza_tounsia/',
+      live: 'https://ghamza-app.vercel.app/',
+      instagram: 'https://www.instagram.com/gamza_tounsia/',
     },
     featured: true,
     highlights: [

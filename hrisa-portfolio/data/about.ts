@@ -56,7 +56,7 @@ Originally from South Tunisia, I bring a unique perspective shaped by diverse cu
     email: 'mahdi.sellami.95@gmail.com',
     linkedin: 'https://www.linkedin.com/in/mahdi-sellami-621710112/',
     github: 'https://github.com/Mahdisellami',
-    instagram: 'https://instagram.com/yourhandle', // Update with real handle
+    instagram: 'https://www.instagram.com/gamza_tounsia/',
     whatsapp: 'https://wa.me/1234567890', // Update with real number
   },
 

@@ -17,6 +17,7 @@ export interface ProfessionalProject {
     github?: string;
     paper?: string;
     demo?: string;
+    instagram?: string;
   };
   featured: boolean;
   status: 'production' | 'beta' | 'development' | 'completed';

@@ -1,7 +1,7 @@
 'use client';
 
 import { ProfessionalProject } from '@/types';
-import { ArrowRight, ExternalLink, Github } from 'lucide-react';
+import { ArrowRight, ExternalLink, Github, Instagram } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -169,6 +169,17 @@ export function ProjectCard({ project, featured = false }: ProjectCardProps) {
                 aria-label="View live demo"
               >
                 <ExternalLink className="w-5 h-5" />
+              </a>
+            )}
+            {project.links?.instagram && (
+              <a
+                href={project.links.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-lg hover:bg-sand-100 text-sand-600 hover:text-sand-900 transition-colors"
+                aria-label="View on Instagram"
+              >
+                <Instagram className="w-5 h-5" />
               </a>
             )}
           </div>
