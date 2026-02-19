@@ -70,11 +70,11 @@ export default function Home() {
           {/* Quick Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mt-20 animate-fade-in">
             <div className="p-6 bg-white/50 backdrop-blur-sm rounded-xl border border-sand-200">
-              <div className="text-3xl font-bold text-brand-600 mb-1">4+</div>
+              <div className="text-3xl font-bold text-brand-600 mb-1">2</div>
               <div className="text-sm text-sand-600">Production Projects</div>
             </div>
             <div className="p-6 bg-white/50 backdrop-blur-sm rounded-xl border border-sand-200">
-              <div className="text-3xl font-bold text-terracotta-600 mb-1">10+</div>
+              <div className="text-3xl font-bold text-terracotta-600 mb-1">20+</div>
               <div className="text-sm text-sand-600">Technologies</div>
             </div>
             <div className="p-6 bg-white/50 backdrop-blur-sm rounded-xl border border-sand-200">
