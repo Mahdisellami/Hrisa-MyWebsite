@@ -107,27 +107,6 @@ export default function PhotographyPage() {
             ))}
           </div>
 
-          {/* How to Add Photos */}
-          <div className="mt-16 p-8 bg-white rounded-2xl border-2 border-sand-200">
-            <h2 className="text-2xl font-display font-bold text-sand-950 mb-4">
-              📁 How to Add Your Photos
-            </h2>
-            <p className="text-sand-700 mb-4">
-              To populate this gallery, add your photos to:
-            </p>
-            <div className="p-4 bg-sand-50 rounded-lg font-mono text-sm text-sand-700 mb-4">
-              hrisa-portfolio/public/images/photography/
-            </div>
-            <p className="text-sand-700 mb-4">Name them as:</p>
-            <ul className="list-disc list-inside space-y-1 text-sand-700 mb-4">
-              <li><code className="bg-sand-100 px-2 py-0.5 rounded">photo-01.jpg</code></li>
-              <li><code className="bg-sand-100 px-2 py-0.5 rounded">photo-02.jpg</code></li>
-              <li><code className="bg-sand-100 px-2 py-0.5 rounded">photo-03.jpg</code> ... and so on</li>
-            </ul>
-            <p className="text-sm text-sand-600">
-              The gallery will automatically display your photos once added. No code changes needed!
-            </p>
-          </div>
         </div>
       </main>
       <Footer />
