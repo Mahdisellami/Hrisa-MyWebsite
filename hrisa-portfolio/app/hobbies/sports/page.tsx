@@ -10,12 +10,14 @@ export const metadata = {
 
 export default function SportsPage() {
   const activities = [
-    'Running',
-    'Swimming',
-    'Cycling',
-    'Dance',
-    'Hiking',
-    'Team Sports',
+    'Tennis',
+    'Padel',
+    'Gym',
+    'Yoga',
+    'Dancing',
+    'Table Tennis',
+    'Volleyball',
+    'Video Games',
   ];
 
   const benefits = [
