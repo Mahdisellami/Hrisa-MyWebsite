@@ -24,7 +24,27 @@ When I'm not coding, you'll find me pursuing creative passions: photography and 
 
 Originally from South Tunisia, I bring a unique perspective shaped by diverse cultural influences, reflected even in the warm "Harissa" color scheme of this portfolio.`,
 
-  location: 'Germany', // Update as needed
+  location: 'Munich, Germany',
+
+  // Cities lived in - rich multicultural background
+  citiesLivedIn: [
+    { city: 'Munich', country: 'Germany', flag: '🇩🇪', years: 'Current' },
+    { city: 'Berlin', country: 'Germany', flag: '🇩🇪' },
+    { city: 'Sfax', country: 'Tunisia', flag: '🇹🇳', hometown: true },
+    { city: 'Tunis', country: 'Tunisia', flag: '🇹🇳' },
+    { city: 'Paris', country: 'France', flag: '🇫🇷' },
+    { city: 'Marseille', country: 'France', flag: '🇫🇷' },
+    { city: 'San Sebastián', country: 'Spain', flag: '🇪🇸' },
+    { city: 'Madrid', country: 'Spain', flag: '🇪🇸' },
+    { city: 'Barcelona', country: 'Spain', flag: '🇪🇸' },
+    { city: 'Gran Canaria', country: 'Spain', flag: '🇪🇸' },
+    { city: 'Sevilla', country: 'Spain', flag: '🇪🇸' },
+    { city: 'Lisbon', country: 'Portugal', flag: '🇵🇹' },
+    { city: 'Porto', country: 'Portugal', flag: '🇵🇹' },
+    { city: 'Lausanne', country: 'Switzerland', flag: '🇨🇭' },
+    { city: 'Cairo', country: 'Egypt', flag: '🇪🇬' },
+    { city: 'Alexandria', country: 'Egypt', flag: '🇪🇬' },
+  ],
 
   availability: {
     freelance: true,
