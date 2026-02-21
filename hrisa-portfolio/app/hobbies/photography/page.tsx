@@ -5,7 +5,7 @@ import { Footer } from '@/components/layout/Footer';
 import { Camera, ArrowLeft, User } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface Photographer {
   id: string;
@@ -19,7 +19,6 @@ interface Photographer {
 
 export default function PhotographyPage() {
   const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
-  const [photographerPhotos, setPhotographerPhotos] = useState<Record<string, string[]>>({});
 
   const photographers: Photographer[] = [
     {
@@ -74,26 +73,6 @@ export default function PhotographyPage() {
       description: 'Corporate and professional photography',
     },
   ];
-
-  useEffect(() => {
-    // This will be populated with actual photo filenames
-    // For now, we'll load them dynamically
-    const loadPhotos = async () => {
-      const photos: Record<string, string[]> = {};
-
-      // Since we can't dynamically read directories in Next.js,
-      // we'll need to manually list the photos or use an API route
-      // For now, let's use a placeholder approach
-
-      photographers.forEach(photographer => {
-        photos[photographer.id] = [];
-      });
-
-      setPhotographerPhotos(photos);
-    };
-
-    loadPhotos();
-  }, []);
 
   const handleImageError = (key: string) => {
     setImageErrors(prev => ({ ...prev, [key]: true }));
