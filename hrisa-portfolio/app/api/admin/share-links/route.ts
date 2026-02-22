@@ -15,7 +15,7 @@ export async function GET() {
       );
     }
 
-    const links = getActiveShareLinks();
+    const links = await getActiveShareLinks();
     return NextResponse.json({ links });
   } catch (error) {
     console.error('Get share links error:', error);
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
 
     const { resourceType, resourceId, expiresInHours, maxUses } = validation.data;
 
-    const shareLink = generateShareLink(
+    const shareLink = await generateShareLink(
       session.user_id,
       resourceType as any,
       resourceId,
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     const url = `${baseUrl}/share/${shareLink.token}`;
 
     // Log audit
-    logAudit({
+    await logAudit({
       userId: session.user_id,
       action: 'SHARE_LINK_CREATED',
       resourceType: resourceType as any,

@@ -8,11 +8,13 @@
     "start": "next start",
     "lint": "next lint",
     "db:init": "tsx scripts/db-init.ts",
-    "db:cleanup": "tsx -e \"import { cleanupExpired } from './lib/db/index.js'; cleanupExpired();\"",
+    "init:turso": "tsx scripts/init-turso.ts",
+    "db:cleanup": "tsx -e \"import { cleanupExpired } from './lib/db/index.js'; await cleanupExpired();\"",
     "create:admin": "tsx scripts/create-admin.ts",
     "seed:protections": "tsx scripts/seed-protections.ts"
   },
   "dependencies": {
+    "@libsql/client": "^0.17.0",
     "@types/better-sqlite3": "^7.6.13",
     "better-sqlite3": "^12.6.2",
     "framer-motion": "^11.15.0",

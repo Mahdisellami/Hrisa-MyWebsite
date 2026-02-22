@@ -34,7 +34,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user exists and is approved
-    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email) as any;
+    const userResult = await db.execute({
+      sql: 'SELECT * FROM users WHERE email = ?',
+      args: [email]
+    });
+    const user = userResult.rows.length > 0 ? userResult.rows[0] as any : null;
 
     if (!user) {
       // Don't reveal if user doesn't exist
@@ -59,7 +63,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check magic link rate limit
-    if (!checkMagicLinkRateLimit(email)) {
+    if (!(await checkMagicLinkRateLimit(email))) {
       return NextResponse.json({
         success: false,
         message: 'Too many magic links requested. Please try again later.',
@@ -67,7 +71,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate magic link
-    const magicLink = generateMagicLink(email, ipAddress);
+    const magicLink = await generateMagicLink(email, ipAddress);
     const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
     const magicLinkUrl = `${baseUrl}/verify?token=${magicLink.token}`;
 
@@ -83,7 +87,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Log audit event
-    logAudit({
+    await logAudit({
       userId: user.id,
       action: 'LOGIN',
       ipAddress,

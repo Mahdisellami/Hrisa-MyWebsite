@@ -9,7 +9,7 @@ export async function GET(
   try {
     const { token } = await params;
 
-    const validation = validateShareLink(token);
+    const validation = await validateShareLink(token);
 
     if (!validation.valid) {
       return NextResponse.json({
@@ -20,7 +20,7 @@ export async function GET(
 
     // Log usage
     const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
-    logAudit({
+    await logAudit({
       action: 'SHARE_LINK_USED',
       resourceType: validation.shareLink?.resource_type as any,
       resourceId: validation.shareLink?.resource_id || undefined,

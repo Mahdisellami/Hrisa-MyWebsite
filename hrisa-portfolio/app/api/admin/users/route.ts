@@ -29,7 +29,8 @@ export async function GET(request: NextRequest) {
 
     query += ' ORDER BY created_at DESC';
 
-    const users = db.prepare(query).all(...params);
+    const result = await db.execute({ sql: query, args: params });
+    const users = result.rows;
 
     return NextResponse.json({ users });
   } catch (error) {
@@ -65,8 +66,11 @@ export async function POST(request: NextRequest) {
     const { email, name, role } = validation.data;
 
     // Check if user exists
-    const existing = db.prepare('SELECT * FROM users WHERE email = ?').get(email) as any;
-    if (existing) {
+    const existingResult = await db.execute({
+      sql: 'SELECT * FROM users WHERE email = ?',
+      args: [email]
+    });
+    if (existingResult.rows.length > 0) {
       return NextResponse.json(
         { error: 'User already exists' },
         { status: 400 }
@@ -77,13 +81,14 @@ export async function POST(request: NextRequest) {
     const userId = nanoid();
     const now = Math.floor(Date.now() / 1000);
 
-    db.prepare(`
-      INSERT INTO users (id, email, name, role, status, created_at, updated_at, approved_at, approved_by)
-      VALUES (?, ?, ?, ?, 'APPROVED', ?, ?, ?, ?)
-    `).run(userId, email, name, role, now, now, now, session.user_id);
+    await db.execute({
+      sql: `INSERT INTO users (id, email, name, role, status, created_at, updated_at, approved_at, approved_by)
+            VALUES (?, ?, ?, ?, 'APPROVED', ?, ?, ?, ?)`,
+      args: [userId, email, name, role, now, now, now, session.user_id]
+    });
 
     // Log audit
-    logAudit({
+    await logAudit({
       userId: session.user_id,
       action: 'USER_CREATED',
       metadata: { createdUserId: userId, email, role },

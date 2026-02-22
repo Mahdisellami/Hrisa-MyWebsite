@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     const userRole = session?.role || null;
 
     // Check access
-    const accessCheck = checkAccess(
+    const accessCheck = await checkAccess(
       userRole,
       shareToken || null,
       resourceType as ResourceType,

@@ -9,12 +9,16 @@ export async function POST(request: NextRequest) {
     if (token) {
       // Get session to find user ID for audit log
       const { db } = await import('@/lib/db');
-      const session = db.prepare('SELECT user_id FROM sessions WHERE token = ?').get(token) as any;
+      const sessionResult = await db.execute({
+        sql: 'SELECT user_id FROM sessions WHERE token = ?',
+        args: [token]
+      });
 
-      if (session) {
+      if (sessionResult.rows.length > 0) {
+        const session = sessionResult.rows[0] as any;
         // Log audit event
         const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
-        logAudit({
+        await logAudit({
           userId: session.user_id,
           action: 'LOGOUT',
           ipAddress,
@@ -23,7 +27,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Delete session
-      deleteSession(token);
+      await deleteSession(token);
     }
 
     // Clear cookie

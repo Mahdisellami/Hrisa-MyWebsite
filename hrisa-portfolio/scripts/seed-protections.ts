@@ -30,41 +30,47 @@ const protectedResources = [
   { type: 'PROJECT', id: 'gamza-tounsia', role: 'EDITOR' },
 ];
 
-try {
-  let inserted = 0;
-  let skipped = 0;
+async function seedProtections() {
+  try {
+    let inserted = 0;
+    let skipped = 0;
 
-  for (const resource of protectedResources) {
-    // Check if already exists
-    const existing = db.prepare(`
-      SELECT * FROM protected_resources
-      WHERE resource_type = ? AND resource_id = ?
-    `).get(resource.type, resource.id);
+    for (const resource of protectedResources) {
+      // Check if already exists
+      const existingResult = await db.execute({
+        sql: `SELECT * FROM protected_resources
+              WHERE resource_type = ? AND resource_id = ?`,
+        args: [resource.type, resource.id]
+      });
 
-    if (existing) {
-      skipped++;
-      continue;
+      if (existingResult.rows.length > 0) {
+        skipped++;
+        continue;
+      }
+
+      // Insert new protection
+      const resourceId = nanoid();
+      await db.execute({
+        sql: `INSERT INTO protected_resources (id, resource_type, resource_id, min_role, created_at, updated_at)
+              VALUES (?, ?, ?, ?, ?, ?)`,
+        args: [resourceId, resource.type, resource.id, resource.role, now, now]
+      });
+
+      inserted++;
+      console.log(`✅ Protected: ${resource.type} - ${resource.id}`);
     }
 
-    // Insert new protection
-    const resourceId = nanoid();
-    db.prepare(`
-      INSERT INTO protected_resources (id, resource_type, resource_id, min_role, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `).run(resourceId, resource.type, resource.id, resource.role, now, now);
+    console.log(`\n📊 Summary:`);
+    console.log(`  - Inserted: ${inserted}`);
+    console.log(`  - Skipped (already protected): ${skipped}`);
+    console.log(`  - Total protected resources: ${inserted + skipped}`);
 
-    inserted++;
-    console.log(`✅ Protected: ${resource.type} - ${resource.id}`);
+    console.log('\n✅ Protection seeding complete!');
+
+  } catch (error) {
+    console.error('❌ Failed to seed protections:', error);
+    process.exit(1);
   }
-
-  console.log(`\n📊 Summary:`);
-  console.log(`  - Inserted: ${inserted}`);
-  console.log(`  - Skipped (already protected): ${skipped}`);
-  console.log(`  - Total protected resources: ${inserted + skipped}`);
-
-  console.log('\n✅ Protection seeding complete!');
-
-} catch (error) {
-  console.error('❌ Failed to seed protections:', error);
-  process.exit(1);
 }
+
+seedProtections();

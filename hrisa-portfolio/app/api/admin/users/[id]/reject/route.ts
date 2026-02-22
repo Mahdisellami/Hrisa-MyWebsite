@@ -21,28 +21,34 @@ export async function POST(
     const { id } = await params;
 
     // Get user
-    const user = db.prepare('SELECT * FROM users WHERE id = ?').get(id) as any;
+    const userResult = await db.execute({
+      sql: 'SELECT * FROM users WHERE id = ?',
+      args: [id]
+    });
 
-    if (!user) {
+    if (userResult.rows.length === 0) {
       return NextResponse.json(
         { error: 'User not found' },
         { status: 404 }
       );
     }
 
+    const user = userResult.rows[0] as any;
+
     // Update user status
     const now = Math.floor(Date.now() / 1000);
-    db.prepare(`
-      UPDATE users
-      SET status = 'REJECTED', updated_at = ?
-      WHERE id = ?
-    `).run(now, id);
+    await db.execute({
+      sql: `UPDATE users
+            SET status = 'REJECTED', updated_at = ?
+            WHERE id = ?`,
+      args: [now, id]
+    });
 
     // Send rejection email
     await sendRegistrationRejectedEmail(user.email, user.name || user.email);
 
     // Log audit
-    logAudit({
+    await logAudit({
       userId: session.user_id,
       action: 'REGISTRATION_REJECTED',
       metadata: { rejectedUserId: id, email: user.email },

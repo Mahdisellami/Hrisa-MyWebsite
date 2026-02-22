@@ -26,27 +26,28 @@ export function hasPermission(userRole: Role, requiredRole: Role): boolean {
 /**
  * Check if a resource is protected
  */
-export function getProtectedResource(
+export async function getProtectedResource(
   resourceType: ResourceType,
   resourceId: string
-): ProtectedResource | null {
-  const result = db.prepare(`
-    SELECT * FROM protected_resources
-    WHERE resource_type = ? AND resource_id = ?
-  `).get(resourceType, resourceId) as any;
+): Promise<ProtectedResource | null> {
+  const result = await db.execute({
+    sql: `SELECT * FROM protected_resources
+          WHERE resource_type = ? AND resource_id = ?`,
+    args: [resourceType, resourceId]
+  });
 
-  return result || null;
+  return result.rows.length > 0 ? (result.rows[0] as unknown as ProtectedResource) : null;
 }
 
 /**
  * Check if user has access to a resource
  */
-export function checkResourceAccess(
+export async function checkResourceAccess(
   userRole: Role | null,
   resourceType: ResourceType,
   resourceId: string
-): { hasAccess: boolean; reason?: string } {
-  const resource = getProtectedResource(resourceType, resourceId);
+): Promise<{ hasAccess: boolean; reason?: string }> {
+  const resource = await getProtectedResource(resourceType, resourceId);
 
   // If resource is not protected, allow access
   if (!resource) {
@@ -70,21 +71,24 @@ export function checkResourceAccess(
 /**
  * Check if share link grants access to a resource
  */
-export function checkShareLinkAccess(
+export async function checkShareLinkAccess(
   shareToken: string,
   resourceType: ResourceType,
   resourceId: string
-): { hasAccess: boolean; reason?: string } {
+): Promise<{ hasAccess: boolean; reason?: string }> {
   const now = Math.floor(Date.now() / 1000);
 
-  const shareLink = db.prepare(`
-    SELECT * FROM share_links
-    WHERE token = ? AND expires_at > ?
-  `).get(shareToken, now) as any;
+  const result = await db.execute({
+    sql: `SELECT * FROM share_links
+          WHERE token = ? AND expires_at > ?`,
+    args: [shareToken, now]
+  });
 
-  if (!shareLink) {
+  if (result.rows.length === 0) {
     return { hasAccess: false, reason: 'Invalid or expired share link' };
   }
+
+  const shareLink = result.rows[0] as any;
 
   // Check if max uses exceeded
   if (shareLink.max_uses !== null && shareLink.use_count >= shareLink.max_uses) {
@@ -108,15 +112,15 @@ export function checkShareLinkAccess(
 /**
  * Combined access check (user role OR share link)
  */
-export function checkAccess(
+export async function checkAccess(
   userRole: Role | null,
   shareToken: string | null,
   resourceType: ResourceType,
   resourceId: string
-): { hasAccess: boolean; reason?: string; method?: 'user' | 'share' } {
+): Promise<{ hasAccess: boolean; reason?: string; method?: 'user' | 'share' }> {
   // Try user role first
   if (userRole) {
-    const userAccess = checkResourceAccess(userRole, resourceType, resourceId);
+    const userAccess = await checkResourceAccess(userRole, resourceType, resourceId);
     if (userAccess.hasAccess) {
       return { ...userAccess, method: 'user' };
     }
@@ -124,7 +128,7 @@ export function checkAccess(
 
   // Try share link
   if (shareToken) {
-    const shareAccess = checkShareLinkAccess(shareToken, resourceType, resourceId);
+    const shareAccess = await checkShareLinkAccess(shareToken, resourceType, resourceId);
     if (shareAccess.hasAccess) {
       return { ...shareAccess, method: 'share' };
     }
@@ -137,45 +141,49 @@ export function checkAccess(
 /**
  * Get all protected resources
  */
-export function getAllProtectedResources(): ProtectedResource[] {
-  return db.prepare('SELECT * FROM protected_resources ORDER BY resource_type, resource_id').all() as ProtectedResource[];
+export async function getAllProtectedResources(): Promise<ProtectedResource[]> {
+  const result = await db.execute('SELECT * FROM protected_resources ORDER BY resource_type, resource_id');
+  return result.rows as unknown as ProtectedResource[];
 }
 
 /**
  * Add or update a protected resource
  */
-export function protectResource(
+export async function protectResource(
   resourceType: ResourceType,
   resourceId: string,
   minRole: Role
-): void {
+): Promise<void> {
   const now = Math.floor(Date.now() / 1000);
-  const existing = getProtectedResource(resourceType, resourceId);
+  const existing = await getProtectedResource(resourceType, resourceId);
 
   if (existing) {
-    db.prepare(`
-      UPDATE protected_resources
-      SET min_role = ?, updated_at = ?
-      WHERE resource_type = ? AND resource_id = ?
-    `).run(minRole, now, resourceType, resourceId);
+    await db.execute({
+      sql: `UPDATE protected_resources
+            SET min_role = ?, updated_at = ?
+            WHERE resource_type = ? AND resource_id = ?`,
+      args: [minRole, now, resourceType, resourceId]
+    });
   } else {
     const { nanoid } = require('nanoid');
-    db.prepare(`
-      INSERT INTO protected_resources (id, resource_type, resource_id, min_role, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `).run(nanoid(), resourceType, resourceId, minRole, now, now);
+    await db.execute({
+      sql: `INSERT INTO protected_resources (id, resource_type, resource_id, min_role, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?)`,
+      args: [nanoid(), resourceType, resourceId, minRole, now, now]
+    });
   }
 }
 
 /**
  * Remove protection from a resource
  */
-export function unprotectResource(
+export async function unprotectResource(
   resourceType: ResourceType,
   resourceId: string
-): void {
-  db.prepare(`
-    DELETE FROM protected_resources
-    WHERE resource_type = ? AND resource_id = ?
-  `).run(resourceType, resourceId);
+): Promise<void> {
+  await db.execute({
+    sql: `DELETE FROM protected_resources
+          WHERE resource_type = ? AND resource_id = ?`,
+    args: [resourceType, resourceId]
+  });
 }

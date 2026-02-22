@@ -33,26 +33,27 @@ export interface AuditLogOptions {
 /**
  * Log an audit event
  */
-export function logAudit(options: AuditLogOptions): void {
+export async function logAudit(options: AuditLogOptions): Promise<void> {
   const id = nanoid();
   const now = Math.floor(Date.now() / 1000);
   const metadata = options.metadata ? JSON.stringify(options.metadata) : null;
 
   try {
-    db.prepare(`
-      INSERT INTO audit_log (id, user_id, action, resource_type, resource_id, ip_address, user_agent, metadata, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(
-      id,
-      options.userId || null,
-      options.action,
-      options.resourceType || null,
-      options.resourceId || null,
-      options.ipAddress || null,
-      options.userAgent || null,
-      metadata,
-      now
-    );
+    await db.execute({
+      sql: `INSERT INTO audit_log (id, user_id, action, resource_type, resource_id, ip_address, user_agent, metadata, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      args: [
+        id,
+        options.userId || null,
+        options.action,
+        options.resourceType || null,
+        options.resourceId || null,
+        options.ipAddress || null,
+        options.userAgent || null,
+        metadata,
+        now
+      ]
+    });
   } catch (error) {
     console.error('Failed to log audit event:', error);
     // Don't throw - audit logging should not break the main flow
@@ -62,7 +63,7 @@ export function logAudit(options: AuditLogOptions): void {
 /**
  * Get audit logs with optional filters
  */
-export function getAuditLogs(options: {
+export async function getAuditLogs(options: {
   userId?: string;
   action?: AuditAction;
   limit?: number;
@@ -93,26 +94,38 @@ export function getAuditLogs(options: {
     }
   }
 
-  return db.prepare(query).all(...params);
+  const result = await db.execute({ sql: query, args: params });
+  return result.rows;
 }
 
 /**
  * Get audit statistics
  */
-export function getAuditStats() {
+export async function getAuditStats() {
   const now = Math.floor(Date.now() / 1000);
   const last24h = now - (24 * 60 * 60);
   const last7d = now - (7 * 24 * 60 * 60);
 
+  const totalResult = await db.execute('SELECT COUNT(*) as count FROM audit_log');
+  const last24hResult = await db.execute({
+    sql: 'SELECT COUNT(*) as count FROM audit_log WHERE created_at > ?',
+    args: [last24h]
+  });
+  const last7dResult = await db.execute({
+    sql: 'SELECT COUNT(*) as count FROM audit_log WHERE created_at > ?',
+    args: [last7d]
+  });
+  const byActionResult = await db.execute(`
+    SELECT action, COUNT(*) as count
+    FROM audit_log
+    GROUP BY action
+    ORDER BY count DESC
+  `);
+
   return {
-    total: db.prepare('SELECT COUNT(*) as count FROM audit_log').get() as { count: number },
-    last24h: db.prepare('SELECT COUNT(*) as count FROM audit_log WHERE created_at > ?').get(last24h) as { count: number },
-    last7d: db.prepare('SELECT COUNT(*) as count FROM audit_log WHERE created_at > ?').get(last7d) as { count: number },
-    byAction: db.prepare(`
-      SELECT action, COUNT(*) as count
-      FROM audit_log
-      GROUP BY action
-      ORDER BY count DESC
-    `).all() as Array<{ action: string; count: number }>,
+    total: totalResult.rows[0] as unknown as { count: number },
+    last24h: last24hResult.rows[0] as unknown as { count: number },
+    last7d: last7dResult.rows[0] as unknown as { count: number },
+    byAction: byActionResult.rows as unknown as Array<{ action: string; count: number }>,
   };
 }

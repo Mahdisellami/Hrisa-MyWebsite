@@ -14,16 +14,20 @@ export async function GET(request: NextRequest) {
     }
 
     // Verify magic link
-    const verification = verifyMagicLink(token);
+    const verification = await verifyMagicLink(token);
 
-    if (!verification.valid) {
+    if (!verification.valid || !verification.email) {
       return NextResponse.redirect(
         new URL(`/login?error=${encodeURIComponent(verification.error || 'invalid_token')}`, request.url)
       );
     }
 
     // Get user
-    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(verification.email) as any;
+    const userResult = await db.execute({
+      sql: 'SELECT * FROM users WHERE email = ?',
+      args: [verification.email]
+    });
+    const user = userResult.rows.length > 0 ? userResult.rows[0] as any : null;
 
     if (!user) {
       return NextResponse.redirect(new URL('/login?error=user_not_found', request.url));
@@ -36,17 +40,20 @@ export async function GET(request: NextRequest) {
     // Create session
     const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
     const userAgent = request.headers.get('user-agent');
-    const session = createSession(user.id, userAgent || undefined, ipAddress);
+    const session = await createSession(user.id, userAgent || undefined, ipAddress);
 
     // Update last login
     const now = Math.floor(Date.now() / 1000);
-    db.prepare('UPDATE users SET last_login_at = ?, updated_at = ? WHERE id = ?').run(now, now, user.id);
+    await db.execute({
+      sql: 'UPDATE users SET last_login_at = ?, updated_at = ? WHERE id = ?',
+      args: [now, now, user.id]
+    });
 
     // Set session cookie
     await setSessionCookie(session.token);
 
     // Log audit event
-    logAudit({
+    await logAudit({
       userId: user.id,
       action: 'LOGIN',
       ipAddress,

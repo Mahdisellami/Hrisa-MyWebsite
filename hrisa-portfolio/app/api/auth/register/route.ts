@@ -34,7 +34,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user already exists
-    const existingUser = db.prepare('SELECT * FROM users WHERE email = ?').get(email) as any;
+    const existingUserResult = await db.execute({
+      sql: 'SELECT * FROM users WHERE email = ?',
+      args: [email]
+    });
+    const existingUser = existingUserResult.rows.length > 0 ? existingUserResult.rows[0] as any : null;
 
     if (existingUser) {
       if (existingUser.status === 'APPROVED') {
@@ -63,13 +67,14 @@ export async function POST(request: NextRequest) {
     const userId = nanoid();
     const now = Math.floor(Date.now() / 1000);
 
-    db.prepare(`
-      INSERT INTO users (id, email, name, role, status, created_at, updated_at)
-      VALUES (?, ?, ?, 'EDITOR', 'PENDING', ?, ?)
-    `).run(userId, email, name, now, now);
+    await db.execute({
+      sql: `INSERT INTO users (id, email, name, role, status, created_at, updated_at)
+            VALUES (?, ?, ?, 'EDITOR', 'PENDING', ?, ?)`,
+      args: [userId, email, name, now, now]
+    });
 
     // Log audit event
-    logAudit({
+    await logAudit({
       userId,
       action: 'REGISTRATION_REQUEST',
       ipAddress,

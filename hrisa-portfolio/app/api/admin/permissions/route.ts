@@ -13,7 +13,7 @@ export async function GET() {
       );
     }
 
-    const resources = getAllProtectedResources();
+    const resources = await getAllProtectedResources();
     return NextResponse.json({ resources });
   } catch (error) {
     console.error('Get permissions error:', error);
