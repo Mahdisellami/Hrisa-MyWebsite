@@ -1,12 +1,10 @@
+'use client';
+
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Trophy, Heart, Zap, Target, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-
-export const metadata = {
-  title: 'Sports & Dance | Mahdi Sellami',
-  description: 'Staying active through sports and movement',
-};
+import { ProtectedPage } from '@/components/auth/ProtectedPage';
 
 export default function SportsPage() {
   const activities = [
@@ -41,7 +39,39 @@ export default function SportsPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen pt-24 pb-20 px-6 bg-sand-50">
+      <ProtectedPage
+        minRole="EDITOR"
+        fallback={
+          <main className="min-h-screen pt-24 pb-20 px-6 bg-sand-50 flex items-center justify-center">
+            <div className="max-w-lg w-full p-8 bg-white rounded-2xl shadow-lg border-2 border-sand-200 text-center">
+              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Trophy className="w-8 h-8 text-yellow-600" />
+              </div>
+              <h1 className="text-2xl font-display font-bold text-sand-950 mb-4">
+                Protected Content
+              </h1>
+              <p className="text-sand-600 mb-6">
+                This sports content is protected. Please log in or request access to view.
+              </p>
+              <div className="flex gap-3 justify-center">
+                <Link
+                  href="/login"
+                  className="px-6 py-3 bg-brand-500 hover:bg-brand-600 text-white rounded-lg font-semibold transition-colors"
+                >
+                  Log In
+                </Link>
+                <Link
+                  href="/register"
+                  className="px-6 py-3 border-2 border-sand-300 text-sand-700 hover:bg-sand-50 rounded-lg font-semibold transition-colors"
+                >
+                  Request Access
+                </Link>
+              </div>
+            </div>
+          </main>
+        }
+      >
+        <main className="min-h-screen pt-24 pb-20 px-6 bg-sand-50">
         <div className="max-w-5xl mx-auto">
           {/* Back Link */}
           <Link
@@ -184,6 +214,7 @@ export default function SportsPage() {
           </section>
         </div>
       </main>
+      </ProtectedPage>
       <Footer />
     </>
   );

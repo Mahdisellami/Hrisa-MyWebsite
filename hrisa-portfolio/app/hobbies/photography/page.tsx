@@ -6,6 +6,7 @@ import { Camera, ArrowLeft, User } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import { ProtectedSection } from '@/components/auth/ProtectedSection';
 
 interface Photographer {
   id: string;
@@ -173,60 +174,87 @@ export default function PhotographyPage() {
             const colors = getPhotographerColors(photographer.id);
 
             return (
-              <section key={photographer.id} className="mb-20">
-                {/* Photographer Header */}
-                <div className={`p-6 ${colors.bg} border-2 ${colors.border} rounded-2xl mb-6`}>
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className={`w-14 h-14 bg-gradient-to-br ${colors.gradient} rounded-xl flex items-center justify-center flex-shrink-0`}>
-                        <User className="w-7 h-7 text-white" />
+              <ProtectedSection
+                key={photographer.id}
+                resourceType="SECTION"
+                resourceId={photographer.folder}
+                fallback={
+                  <div className="mb-20 p-8 bg-sand-100 border-2 border-sand-200 rounded-xl text-center">
+                    <div className="w-12 h-12 bg-sand-300 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Camera className="w-6 h-6 text-sand-600" />
+                    </div>
+                    <h3 className="text-xl font-display font-bold text-sand-950 mb-2">
+                      {photographer.displayName}'s Photos Are Protected
+                    </h3>
+                    <p className="text-sand-700 mb-4">
+                      This photographer's work is protected.{' '}
+                      <a href="/login" className="text-brand-600 hover:text-brand-700 underline">
+                        Log in
+                      </a>
+                      {' '}or{' '}
+                      <a href="/register" className="text-brand-600 hover:text-brand-700 underline">
+                        request access
+                      </a>
+                      {' '}to view {photographer.displayName === 'Mahdi Sellami' ? '75' : photographer.displayName === 'Sofiane Affes' ? '23' : photographer.displayName === 'Tino Von Ohrdruf' ? '9' : photographer.displayName === 'fortiss GmbH' ? '17' : photographer.displayName === 'Photoshoot.at' ? '5' : photographer.displayName === 'linsengericht.foto.stuttgart' ? '4' : '1'} professional photos.
+                    </p>
+                  </div>
+                }
+              >
+                <section className="mb-20">
+                  {/* Photographer Header */}
+                  <div className={`p-6 ${colors.bg} border-2 ${colors.border} rounded-2xl mb-6`}>
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className={`w-14 h-14 bg-gradient-to-br ${colors.gradient} rounded-xl flex items-center justify-center flex-shrink-0`}>
+                          <User className="w-7 h-7 text-white" />
+                        </div>
+                        <div>
+                          <h2 className="text-2xl font-display font-bold text-sand-950 mb-1">
+                            {photographer.displayName}
+                          </h2>
+                          {photographer.description && (
+                            <p className="text-sand-700 text-sm">
+                              {photographer.description}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                      <div>
-                        <h2 className="text-2xl font-display font-bold text-sand-950 mb-1">
-                          {photographer.displayName}
-                        </h2>
-                        {photographer.description && (
-                          <p className="text-sand-700 text-sm">
-                            {photographer.description}
-                          </p>
+
+                      {/* Links */}
+                      <div className="flex gap-3">
+                        {photographer.website && (
+                          <a
+                            href={photographer.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-4 py-2 bg-white border-2 border-sand-300 rounded-lg text-sm font-medium text-sand-700 hover:border-brand-500 hover:text-brand-700 transition-all"
+                          >
+                            Website
+                          </a>
+                        )}
+                        {photographer.instagram && (
+                          <a
+                            href={photographer.instagram}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-4 py-2 bg-white border-2 border-sand-300 rounded-lg text-sm font-medium text-sand-700 hover:border-brand-500 hover:text-brand-700 transition-all"
+                          >
+                            Instagram
+                          </a>
                         )}
                       </div>
                     </div>
-
-                    {/* Links */}
-                    <div className="flex gap-3">
-                      {photographer.website && (
-                        <a
-                          href={photographer.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="px-4 py-2 bg-white border-2 border-sand-300 rounded-lg text-sm font-medium text-sand-700 hover:border-brand-500 hover:text-brand-700 transition-all"
-                        >
-                          Website
-                        </a>
-                      )}
-                      {photographer.instagram && (
-                        <a
-                          href={photographer.instagram}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="px-4 py-2 bg-white border-2 border-sand-300 rounded-lg text-sm font-medium text-sand-700 hover:border-brand-500 hover:text-brand-700 transition-all"
-                        >
-                          Instagram
-                        </a>
-                      )}
-                    </div>
                   </div>
-                </div>
 
-                {/* Photo Grid - Static implementation */}
-                <PhotographerGallery
-                  photographer={photographer}
-                  colors={colors}
-                  imageErrors={imageErrors}
-                  handleImageError={handleImageError}
-                />
-              </section>
+                  {/* Photo Grid - Static implementation */}
+                  <PhotographerGallery
+                    photographer={photographer}
+                    colors={colors}
+                    imageErrors={imageErrors}
+                    handleImageError={handleImageError}
+                  />
+                </section>
+              </ProtectedSection>
             );
           })}
         </div>

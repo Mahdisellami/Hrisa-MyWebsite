@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, LogOut, LogIn } from 'lucide-react';
+import { useAuth } from '@/lib/auth/AuthProvider';
 
 const navigation = [
   { name: 'Professional', href: '/professional' },
@@ -14,6 +15,7 @@ const navigation = [
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, authenticated, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,13 +62,48 @@ export function Header() {
               </Link>
             ))}
 
-            {/* CTA Button */}
-            <Link
-              href="#contact"
-              className="px-6 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-lg font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105"
-            >
-              Let's Talk
-            </Link>
+            {/* Auth Buttons */}
+            {authenticated ? (
+              <div className="flex items-center gap-4">
+                {user?.role === 'ADMIN' && (
+                  <Link
+                    href="/admin"
+                    className="text-sm font-medium text-sand-700 hover:text-brand-500 transition-colors"
+                  >
+                    Admin
+                  </Link>
+                )}
+                <Link
+                  href="/dashboard"
+                  className="text-sm font-medium text-sand-700 hover:text-brand-500 transition-colors"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={logout}
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-sand-700 hover:text-brand-500 transition-colors"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-4">
+                <Link
+                  href="/login"
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-sand-700 hover:text-brand-500 transition-colors"
+                >
+                  <LogIn className="w-4 h-4" />
+                  Login
+                </Link>
+                <Link
+                  href="/register"
+                  className="px-6 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-lg font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105"
+                >
+                  Request Access
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -97,13 +134,56 @@ export function Header() {
                   {item.name}
                 </Link>
               ))}
-              <Link
-                href="#contact"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="px-6 py-3 bg-brand-500 hover:bg-brand-600 text-white rounded-lg font-semibold text-center transition-all duration-300"
-              >
-                Let's Talk
-              </Link>
+
+              {/* Mobile Auth Buttons */}
+              {authenticated ? (
+                <>
+                  {user?.role === 'ADMIN' && (
+                    <Link
+                      href="/admin"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="text-base font-medium text-sand-700 hover:text-brand-500 transition-colors px-4 py-2 rounded-lg hover:bg-sand-50"
+                    >
+                      Admin
+                    </Link>
+                  )}
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-base font-medium text-sand-700 hover:text-brand-500 transition-colors px-4 py-2 rounded-lg hover:bg-sand-50"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      logout();
+                    }}
+                    className="flex items-center gap-2 text-base font-medium text-sand-700 hover:text-brand-500 transition-colors px-4 py-2 rounded-lg hover:bg-sand-50 text-left w-full"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-2 text-base font-medium text-sand-700 hover:text-brand-500 transition-colors px-4 py-2 rounded-lg hover:bg-sand-50"
+                  >
+                    <LogIn className="w-4 h-4" />
+                    Login
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="px-6 py-3 bg-brand-500 hover:bg-brand-600 text-white rounded-lg font-semibold text-center transition-all duration-300"
+                  >
+                    Request Access
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         )}
