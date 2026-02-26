@@ -6,7 +6,7 @@ if (!process.env.RESEND_API_KEY) {
 
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
-export const FROM_EMAIL = 'Hrisa Portfolio <onboarding@resend.dev>'; // Update with your verified domain
+export const FROM_EMAIL = 'Hrisa Portfolio <noreply@hrisa.tech>';
 
 /**
  * Send magic link email

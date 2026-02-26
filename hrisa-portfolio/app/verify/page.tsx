@@ -1,14 +1,24 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 
 export default function VerifyPage() {
+  const searchParams = useSearchParams();
+
   useEffect(() => {
-    // The actual verification happens in the API route
-    // This page is just a placeholder in case the redirect takes a moment
-  }, []);
+    // Get token from URL and redirect to API route
+    const token = searchParams.get('token');
+    if (token) {
+      // Redirect to API route for actual verification
+      window.location.href = `/api/auth/verify?token=${token}`;
+    } else {
+      // No token, redirect to login
+      window.location.href = '/login?error=missing_token';
+    }
+  }, [searchParams]);
 
   return (
     <>

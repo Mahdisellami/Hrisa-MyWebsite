@@ -25,9 +25,10 @@ export default function UsersPage() {
     try {
       const res = await fetch('/api/admin/users');
       const data = await res.json();
-      setUsers(data.users);
+      setUsers(data.users || []);
     } catch (error) {
       console.error('Failed to fetch users:', error);
+      setUsers([]);
     } finally {
       setLoading(false);
     }
@@ -46,8 +47,10 @@ export default function UsersPage() {
       ADMIN: 'bg-red-100 text-red-700 border-red-200',
       EDITOR: 'bg-blue-100 text-blue-700 border-blue-200',
       PUBLIC: 'bg-gray-100 text-gray-700 border-gray-200',
+      VISITOR: 'bg-green-100 text-green-700 border-green-200',
+      GUEST: 'bg-purple-100 text-purple-700 border-purple-200',
     };
-    return colors[role as keyof typeof colors] || colors.PUBLIC;
+    return colors[role as keyof typeof colors] || colors.GUEST;
   };
 
   const getStatusBadge = (status: string) => {

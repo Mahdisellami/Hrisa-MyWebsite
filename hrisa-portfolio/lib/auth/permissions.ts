@@ -1,6 +1,6 @@
 import { db } from '@/lib/db';
 
-export type Role = 'PUBLIC' | 'EDITOR' | 'ADMIN';
+export type Role = 'GUEST' | 'VISITOR' | 'PUBLIC' | 'EDITOR' | 'ADMIN';
 export type ResourceType = 'PAGE' | 'SECTION' | 'PROJECT';
 
 interface ProtectedResource {
@@ -11,9 +11,11 @@ interface ProtectedResource {
 }
 
 const roleHierarchy: Record<Role, number> = {
+  GUEST: 0,
+  VISITOR: 0,
   PUBLIC: 0,
-  EDITOR: 1,
-  ADMIN: 2,
+  EDITOR: 0,
+  ADMIN: 1,
 };
 
 /**

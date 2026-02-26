@@ -13,7 +13,7 @@ export async function GET() {
       );
     }
 
-    const stats = getDatabaseStats();
+    const stats = await getDatabaseStats();
     return NextResponse.json(stats);
   } catch (error) {
     console.error('Stats error:', error);

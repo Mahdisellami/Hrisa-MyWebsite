@@ -25,9 +25,11 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const roleHierarchy: Record<Role, number> = {
+  GUEST: 0,
+  VISITOR: 0,
   PUBLIC: 0,
-  EDITOR: 1,
-  ADMIN: 2,
+  EDITOR: 0,
+  ADMIN: 1,
 };
 
 const SHARE_TOKEN_KEY = 'hrisa_share_token';
@@ -104,7 +106,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const hasRole = (minRole: Role): boolean => {
-    if (!user) return minRole === 'PUBLIC';
+    if (!user) return false; // Not logged in = no access
     return roleHierarchy[user.role] >= roleHierarchy[minRole];
   };
 
