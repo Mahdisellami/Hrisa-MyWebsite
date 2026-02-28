@@ -1,4 +1,4 @@
-export type Role = 'PUBLIC' | 'EDITOR' | 'ADMIN';
+export type Role = 'GUEST' | 'VISITOR' | 'PUBLIC' | 'EDITOR' | 'ADMIN';
 export type UserStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 export type ResourceType = 'PAGE' | 'SECTION' | 'PROJECT';
 
