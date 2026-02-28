@@ -4,7 +4,8 @@ if (!process.env.RESEND_API_KEY) {
   console.warn('⚠️  RESEND_API_KEY not set. Email functionality will not work.');
 }
 
-export const resend = new Resend(process.env.RESEND_API_KEY);
+// Provide a dummy key during build, actual key used at runtime
+export const resend = new Resend(process.env.RESEND_API_KEY || 're_dummy_key_for_build');
 
 export const FROM_EMAIL = 'Hrisa Portfolio <noreply@hrisa.tech>';
 
