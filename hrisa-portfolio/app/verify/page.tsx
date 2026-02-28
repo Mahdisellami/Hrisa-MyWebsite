@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 
-export default function VerifyPage() {
+function VerifyContent() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -36,5 +36,26 @@ export default function VerifyPage() {
       </main>
       <Footer />
     </>
+  );
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={
+      <>
+        <Header />
+        <main className="min-h-screen pt-24 pb-20 px-6 bg-sand-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-brand-500 mx-auto mb-6" />
+            <h1 className="text-2xl font-display font-bold text-sand-950 mb-2">
+              Loading...
+            </h1>
+          </div>
+        </main>
+        <Footer />
+      </>
+    }>
+      <VerifyContent />
+    </Suspense>
   );
 }
