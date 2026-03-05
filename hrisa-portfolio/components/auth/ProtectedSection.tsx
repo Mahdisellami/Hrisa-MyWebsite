@@ -8,6 +8,7 @@ interface ProtectedSectionProps {
   resourceType: string;
   resourceId: string;
   fallback?: React.ReactNode;
+  hideIfNoAccess?: boolean; // If true, completely hide the section instead of showing fallback
 }
 
 export function ProtectedSection({
@@ -15,6 +16,7 @@ export function ProtectedSection({
   resourceType,
   resourceId,
   fallback,
+  hideIfNoAccess = false,
 }: ProtectedSectionProps) {
   const { checkAccess, loading: authLoading } = useAuth();
   const [hasAccess, setHasAccess] = useState(false);
@@ -27,13 +29,24 @@ export function ProtectedSection({
     });
   }, [resourceType, resourceId, checkAccess]);
 
+  // While checking, hide completely if hideIfNoAccess is true
   if (authLoading || checking) {
+    if (hideIfNoAccess) {
+      return null;
+    }
     return (
       <div className="animate-pulse bg-sand-200 rounded-xl h-64 mb-20" />
     );
   }
 
+  // If no access
   if (!hasAccess) {
+    // Completely hide the section
+    if (hideIfNoAccess) {
+      return null;
+    }
+
+    // Show fallback or default protected message
     return fallback || (
       <div className="mb-20 p-8 bg-sand-100 border-2 border-sand-200 rounded-xl text-center">
         <div className="w-12 h-12 bg-sand-300 rounded-full flex items-center justify-center mx-auto mb-4">

@@ -4,7 +4,11 @@ import type { ResourceType } from './permissions';
 
 export type AuditAction =
   | 'LOGIN'
+  | 'LOGIN_FAILED'
   | 'LOGOUT'
+  | 'SESSION_EXPIRED'
+  | 'SESSION_INVALIDATED'
+  | 'SESSION_SUSPICIOUS'
   | 'REGISTRATION_REQUEST'
   | 'REGISTRATION_APPROVED'
   | 'REGISTRATION_REJECTED'
@@ -16,9 +20,12 @@ export type AuditAction =
   | 'PERMISSION_CREATED'
   | 'PERMISSION_UPDATED'
   | 'PERMISSION_DELETED'
+  | 'PERMISSION_EXPIRED'
   | 'USER_CREATED'
   | 'USER_UPDATED'
-  | 'USER_DELETED';
+  | 'USER_DELETED'
+  | 'SECURITY_ALERT'
+  | 'ADMIN_ACTION';
 
 export interface AuditLogOptions {
   userId?: string | null;
@@ -128,4 +135,117 @@ export async function getAuditStats() {
     last7d: last7dResult.rows[0] as unknown as { count: number },
     byAction: byActionResult.rows as unknown as Array<{ action: string; count: number }>,
   };
+}
+
+/**
+ * Log failed login attempt
+ */
+export async function logLoginFailed(email: string, reason: string, ipAddress?: string, userAgent?: string): Promise<void> {
+  await logAudit({
+    userId: null,
+    action: 'LOGIN_FAILED',
+    ipAddress,
+    userAgent,
+    metadata: { email, reason }
+  });
+}
+
+/**
+ * Log access attempt
+ */
+export async function logAccessAttempt(
+  userId: string | null,
+  granted: boolean,
+  resourceType: string,
+  resourceId: string,
+  reason?: string,
+  ipAddress?: string,
+  userAgent?: string
+): Promise<void> {
+  await logAudit({
+    userId,
+    action: granted ? 'ACCESS_GRANTED' : 'ACCESS_DENIED',
+    resourceType: resourceType as any,
+    resourceId,
+    ipAddress,
+    userAgent,
+    metadata: { reason }
+  });
+}
+
+/**
+ * Log permission change
+ */
+export async function logPermissionChange(
+  adminUserId: string,
+  targetUserId: string,
+  action: 'PERMISSION_CREATED' | 'PERMISSION_DELETED' | 'PERMISSION_EXPIRED',
+  resourceType: string,
+  resourceId: string,
+  expiresAt?: number | null
+): Promise<void> {
+  await logAudit({
+    userId: adminUserId,
+    action,
+    resourceType: resourceType as any,
+    resourceId,
+    metadata: {
+      target_user_id: targetUserId,
+      expires_at: expiresAt
+    }
+  });
+}
+
+/**
+ * Log security alert
+ */
+export async function logSecurityAlert(
+  userId: string | null,
+  alertType: string,
+  details: Record<string, any>,
+  ipAddress?: string,
+  userAgent?: string
+): Promise<void> {
+  await logAudit({
+    userId,
+    action: 'SECURITY_ALERT',
+    ipAddress,
+    userAgent,
+    metadata: {
+      alert_type: alertType,
+      ...details
+    }
+  });
+}
+
+/**
+ * Log suspicious session activity
+ */
+export async function logSuspiciousSession(
+  userId: string,
+  sessionId: string,
+  reason: string,
+  ipAddress?: string,
+  userAgent?: string
+): Promise<void> {
+  await logSecurityAlert(
+    userId,
+    'suspicious_session',
+    {
+      session_id: sessionId,
+      reason
+    },
+    ipAddress,
+    userAgent
+  );
+}
+
+/**
+ * Get recent security alerts
+ */
+export async function getSecurityAlerts(limit: number = 50): Promise<any[]> {
+  return getAuditLogs({
+    action: 'SECURITY_ALERT',
+    limit
+  });
 }

@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentSession } from '@/lib/auth/session';
 import { db } from '@/lib/db';
 import { sendRegistrationApprovedEmail } from '@/lib/email/resend';
-import { logAudit } from '@/lib/auth/audit';
+import { logAudit, logPermissionChange } from '@/lib/auth/audit';
+import { grantResourcePermission } from '@/lib/auth/permissions';
 
 export async function POST(
   request: NextRequest,
@@ -19,6 +20,13 @@ export async function POST(
     }
 
     const { id } = await params;
+
+    // Parse request body
+    const body = await request.json();
+    const {
+      resourcePermissions = [],
+      expiresAt = null,
+    } = body;
 
     // Get user
     const userResult = await db.execute({
@@ -42,6 +50,14 @@ export async function POST(
       );
     }
 
+    // Validate resourcePermissions
+    if (!Array.isArray(resourcePermissions) || resourcePermissions.length === 0) {
+      return NextResponse.json(
+        { error: 'At least one resource permission is required' },
+        { status: 400 }
+      );
+    }
+
     // Update user status
     const now = Math.floor(Date.now() / 1000);
     await db.execute({
@@ -51,6 +67,27 @@ export async function POST(
       args: [now, session.user_id, now, id]
     });
 
+    // Grant resource permissions
+    for (const resourceId of resourcePermissions) {
+      await grantResourcePermission(
+        id,
+        'SECTION',
+        resourceId,
+        session.user_id,
+        expiresAt
+      );
+
+      // Log permission grant
+      await logPermissionChange(
+        session.user_id,
+        id,
+        'PERMISSION_CREATED',
+        'SECTION',
+        resourceId,
+        expiresAt
+      );
+    }
+
     // Send approval email
     await sendRegistrationApprovedEmail(user.email, user.name || user.email);
 
@@ -58,12 +95,18 @@ export async function POST(
     await logAudit({
       userId: session.user_id,
       action: 'REGISTRATION_APPROVED',
-      metadata: { approvedUserId: id, email: user.email },
+      metadata: {
+        approvedUserId: id,
+        email: user.email,
+        permissions_granted: resourcePermissions.length,
+        expires_at: expiresAt,
+      },
     });
 
     return NextResponse.json({
       success: true,
       message: 'User approved successfully',
+      permissions_granted: resourcePermissions.length,
     });
   } catch (error) {
     console.error('Approve user error:', error);

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Check, X, Clock } from 'lucide-react';
+import ApprovalModal from '@/components/admin/ApprovalModal';
 
 interface User {
   id: string;
@@ -16,6 +17,8 @@ export default function PendingUsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState<string | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [showApprovalModal, setShowApprovalModal] = useState(false);
 
   useEffect(() => {
     fetchPendingUsers();
@@ -34,23 +37,44 @@ export default function PendingUsersPage() {
   };
 
   const handleApprove = async (userId: string) => {
-    if (!confirm('Approve this user?')) return;
+    const user = users.find(u => u.id === userId);
+    if (!user) return;
 
+    setSelectedUser(user);
+    setShowApprovalModal(true);
+  };
+
+  const handleApproveWithSections = async (
+    userId: string,
+    resourcePermissions: string[],
+    expiresAt: number | null
+  ) => {
     setProcessing(userId);
     try {
       const res = await fetch(`/api/admin/users/${userId}/approve`, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          resourcePermissions,
+          expiresAt,
+        }),
       });
 
       if (res.ok) {
         // Remove from list
         setUsers(users.filter(u => u.id !== userId));
+        setShowApprovalModal(false);
+        setSelectedUser(null);
       } else {
-        alert('Failed to approve user');
+        const data = await res.json();
+        alert(data.error || 'Failed to approve user');
       }
     } catch (error) {
       console.error('Approve error:', error);
       alert('Failed to approve user');
+      throw error;
     } finally {
       setProcessing(null);
     }
@@ -179,6 +203,17 @@ export default function PendingUsersPage() {
           ))}
         </div>
       )}
+
+      {/* Approval Modal */}
+      <ApprovalModal
+        user={selectedUser}
+        isOpen={showApprovalModal}
+        onClose={() => {
+          setShowApprovalModal(false);
+          setSelectedUser(null);
+        }}
+        onApprove={handleApproveWithSections}
+      />
     </div>
   );
 }

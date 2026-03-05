@@ -11,7 +11,10 @@
     "init:turso": "tsx scripts/init-turso.ts",
     "db:cleanup": "tsx -e \"import { cleanupExpired } from './lib/db/index.js'; await cleanupExpired();\"",
     "create:admin": "tsx scripts/create-admin.ts",
-    "seed:protections": "tsx scripts/seed-protections.ts"
+    "create:magic-link": "tsx scripts/create-magic-link.ts",
+    "seed:protections": "tsx scripts/seed-protections.ts",
+    "migrate:security": "tsx scripts/migrate-security-features.ts",
+    "migrate:existing-users": "tsx scripts/migrate-existing-users.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.17.0",

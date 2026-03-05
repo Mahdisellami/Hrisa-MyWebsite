@@ -1,4 +1,8 @@
 import { Resend } from 'resend';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
 
 if (!process.env.RESEND_API_KEY) {
   console.warn('⚠️  RESEND_API_KEY not set. Email functionality will not work.');
@@ -7,7 +11,9 @@ if (!process.env.RESEND_API_KEY) {
 // Provide a dummy key during build, actual key used at runtime
 export const resend = new Resend(process.env.RESEND_API_KEY || 're_dummy_key_for_build');
 
-export const FROM_EMAIL = 'Hrisa Portfolio <noreply@hrisa.tech>';
+// Using Resend's onboarding domain for testing
+// TODO: Update to 'Hrisa Portfolio <noreply@hrisa.tech>' after verifying domain
+export const FROM_EMAIL = 'Hrisa Portfolio <onboarding@resend.dev>';
 
 /**
  * Send magic link email
@@ -17,16 +23,33 @@ export async function sendMagicLinkEmail(
   magicLink: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { data, error } = await resend.emails.send({
+    // Workaround: Use curl since Node.js fetch has network issues
+    const payload = JSON.stringify({
       from: FROM_EMAIL,
       to,
       subject: 'Your Magic Link to Hrisa Portfolio',
       html: renderMagicLinkEmail(magicLink),
     });
 
-    if (error) {
-      console.error('Resend error:', error);
-      return { success: false, error: error.message };
+    const command = `curl -s -X POST "https://api.resend.com/emails" \\
+      -H "Authorization: Bearer ${process.env.RESEND_API_KEY}" \\
+      -H "Content-Type: application/json" \\
+      -d '${payload.replace(/'/g, "'\\''")}'`;
+
+    const { stdout, stderr } = await execAsync(command);
+
+    if (stderr) {
+      console.error('Resend error:', stderr);
+      return { success: false, error: 'Failed to send email' };
+    }
+
+    const response = JSON.parse(stdout);
+    if (response.id) {
+      console.log('Email sent successfully:', response.id);
+      return { success: true };
+    } else if (response.message) {
+      console.error('Resend error:', response);
+      return { success: false, error: response.message };
     }
 
     return { success: true };
@@ -45,16 +68,24 @@ export async function sendRegistrationRequestEmail(
   userName: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { data, error } = await resend.emails.send({
-      from: FROM_EMAIL,
-      to: adminEmail,
-      subject: `New Access Request from ${userName}`,
-      html: renderRegistrationRequestEmail(userEmail, userName),
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: FROM_EMAIL,
+        to: adminEmail,
+        subject: `New Access Request from ${userName}`,
+        html: renderRegistrationRequestEmail(userEmail, userName),
+      }),
     });
 
-    if (error) {
-      console.error('Resend error:', error);
-      return { success: false, error: error.message };
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Resend error:', errorData);
+      return { success: false, error: errorData.message || 'Failed to send email' };
     }
 
     return { success: true };

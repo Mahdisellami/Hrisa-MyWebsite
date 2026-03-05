@@ -26,14 +26,18 @@ CREATE TABLE IF NOT EXISTS sessions (
   token TEXT UNIQUE NOT NULL,
   expires_at INTEGER NOT NULL,
   created_at INTEGER NOT NULL,
+  last_activity_at INTEGER NOT NULL,  -- Track activity for session timeout
   user_agent TEXT,
   ip_address TEXT,
+  is_suspicious INTEGER DEFAULT 0,     -- Flag suspicious sessions
+  invalidated_at INTEGER,              -- Manual invalidation timestamp
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);
 CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
 CREATE INDEX IF NOT EXISTS idx_sessions_expires_at ON sessions(expires_at);
+CREATE INDEX IF NOT EXISTS idx_sessions_last_activity ON sessions(last_activity_at);
 
 -- Magic links table
 CREATE TABLE IF NOT EXISTS magic_links (
@@ -81,6 +85,26 @@ CREATE TABLE IF NOT EXISTS protected_resources (
 
 CREATE INDEX IF NOT EXISTS idx_protected_resources_type_id ON protected_resources(resource_type, resource_id);
 CREATE INDEX IF NOT EXISTS idx_protected_resources_role ON protected_resources(min_role);
+
+-- User resource permissions table (granular section-based access)
+CREATE TABLE IF NOT EXISTS user_resource_permissions (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  resource_type TEXT NOT NULL,      -- 'SECTION', 'PAGE', 'PROJECT'
+  resource_id TEXT NOT NULL,        -- e.g., 'mahdi-sellami', 'sofiane-affes'
+  granted_by TEXT NOT NULL,         -- Admin user ID who granted access
+  granted_at INTEGER NOT NULL,
+  expires_at INTEGER,               -- NULL = no expiration, otherwise unix timestamp
+  created_at INTEGER NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (granted_by) REFERENCES users(id),
+  UNIQUE(user_id, resource_type, resource_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_permissions_user ON user_resource_permissions(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_permissions_resource ON user_resource_permissions(resource_type, resource_id);
+CREATE INDEX IF NOT EXISTS idx_user_permissions_lookup ON user_resource_permissions(user_id, resource_type, resource_id);
+CREATE INDEX IF NOT EXISTS idx_user_permissions_expires ON user_resource_permissions(expires_at);
 
 -- Audit log table
 CREATE TABLE IF NOT EXISTS audit_log (

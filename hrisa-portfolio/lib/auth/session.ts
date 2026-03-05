@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { db } from '@/lib/db';
 import { nanoid } from 'nanoid';
 import crypto from 'crypto';
+import { logSuspiciousSession, logAudit } from './audit';
 
 export interface Session {
   id: string;
@@ -9,18 +10,23 @@ export interface Session {
   token: string;
   expires_at: number;
   created_at: number;
+  last_activity_at: number;
+  is_suspicious: number;
+  user_agent?: string | null;
+  ip_address?: string | null;
 }
 
 export interface SessionUser {
   id: string;
   email: string;
   name: string | null;
-  role: 'PUBLIC' | 'EDITOR' | 'ADMIN';
+  role: 'PUBLIC' | 'EDITOR' | 'ADMIN' | 'GUEST' | 'VISITOR';
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
 }
 
 const SESSION_COOKIE_NAME = 'hrisa_session';
-const SESSION_DURATION = 7 * 24 * 60 * 60; // 7 days in seconds
+const SESSION_DURATION = 24 * 60 * 60; // 24 hours in seconds (reduced from 7 days)
+const SESSION_INACTIVITY_TIMEOUT = 2 * 60 * 60; // 2 hours inactivity timeout
 
 /**
  * Create a new session for a user
@@ -32,9 +38,9 @@ export async function createSession(userId: string, userAgent?: string, ipAddres
   const expiresAt = now + SESSION_DURATION;
 
   await db.execute({
-    sql: `INSERT INTO sessions (id, user_id, token, expires_at, created_at, user_agent, ip_address)
-          VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    args: [id, userId, token, expiresAt, now, userAgent || null, ipAddress || null]
+    sql: `INSERT INTO sessions (id, user_id, token, expires_at, created_at, last_activity_at, user_agent, ip_address, is_suspicious, invalidated_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, NULL)`,
+    args: [id, userId, token, expiresAt, now, now, userAgent || null, ipAddress || null]
   });
 
   return {
@@ -43,13 +49,17 @@ export async function createSession(userId: string, userAgent?: string, ipAddres
     token,
     expires_at: expiresAt,
     created_at: now,
+    last_activity_at: now,
+    is_suspicious: 0,
+    user_agent: userAgent || null,
+    ip_address: ipAddress || null,
   };
 }
 
 /**
  * Get session by token
  */
-export async function getSessionByToken(token: string): Promise<(Session & SessionUser) | null> {
+export async function getSessionByToken(token: string, userAgent?: string, ipAddress?: string): Promise<(Session & SessionUser) | null> {
   const now = Math.floor(Date.now() / 1000);
 
   const result = await db.execute({
@@ -59,6 +69,11 @@ export async function getSessionByToken(token: string): Promise<(Session & Sessi
             s.token,
             s.expires_at,
             s.created_at as session_created_at,
+            s.last_activity_at,
+            s.is_suspicious,
+            s.invalidated_at,
+            s.user_agent as session_user_agent,
+            s.ip_address as session_ip_address,
             u.id,
             u.email,
             u.name,
@@ -76,12 +91,68 @@ export async function getSessionByToken(token: string): Promise<(Session & Sessi
 
   const row = result.rows[0] as any;
 
+  // Check if session is invalidated
+  if (row.invalidated_at !== null) {
+    return null;
+  }
+
+  // Check for inactivity timeout (2 hours)
+  const lastActivity = row.last_activity_at;
+  if (now - lastActivity > SESSION_INACTIVITY_TIMEOUT) {
+    // Session expired due to inactivity
+    await deleteSession(token);
+    return null;
+  }
+
+  // Detect suspicious activity (IP or user agent change)
+  let isSuspicious = row.is_suspicious === 1;
+  if (!isSuspicious && (row.session_user_agent || row.session_ip_address)) {
+    if (
+      (userAgent && row.session_user_agent && userAgent !== row.session_user_agent) ||
+      (ipAddress && row.session_ip_address && ipAddress !== row.session_ip_address)
+    ) {
+      // Mark session as suspicious
+      isSuspicious = true;
+      await db.execute({
+        sql: 'UPDATE sessions SET is_suspicious = 1 WHERE token = ?',
+        args: [token]
+      });
+
+      // Log security alert
+      const reason = [];
+      if (userAgent && row.session_user_agent && userAgent !== row.session_user_agent) {
+        reason.push('User-Agent changed');
+      }
+      if (ipAddress && row.session_ip_address && ipAddress !== row.session_ip_address) {
+        reason.push('IP address changed');
+      }
+
+      await logSuspiciousSession(
+        row.user_id,
+        row.session_id,
+        reason.join(', '),
+        ipAddress,
+        userAgent
+      );
+    }
+  }
+
+  // Update last activity timestamp
+  await db.execute({
+    sql: 'UPDATE sessions SET last_activity_at = ? WHERE token = ?',
+    args: [now, token]
+  });
+
   return {
     id: row.session_id,
     user_id: row.user_id,
     token: row.token,
     expires_at: row.expires_at,
     created_at: row.session_created_at,
+    last_activity_at: now, // Updated timestamp
+    is_suspicious: isSuspicious ? 1 : 0,
+    user_agent: row.session_user_agent,
+    ip_address: row.session_ip_address,
     email: row.email,
     name: row.name,
     role: row.role,
@@ -106,6 +177,28 @@ export async function deleteUserSessions(userId: string): Promise<void> {
   await db.execute({
     sql: 'DELETE FROM sessions WHERE user_id = ?',
     args: [userId]
+  });
+}
+
+/**
+ * Invalidate a session (soft delete - keeps record for audit)
+ */
+export async function invalidateSession(token: string): Promise<void> {
+  const now = Math.floor(Date.now() / 1000);
+  await db.execute({
+    sql: 'UPDATE sessions SET invalidated_at = ? WHERE token = ?',
+    args: [now, token]
+  });
+}
+
+/**
+ * Invalidate all sessions for a user
+ */
+export async function invalidateUserSessions(userId: string): Promise<void> {
+  const now = Math.floor(Date.now() / 1000);
+  await db.execute({
+    sql: 'UPDATE sessions SET invalidated_at = ? WHERE user_id = ? AND invalidated_at IS NULL',
+    args: [now, userId]
   });
 }
 

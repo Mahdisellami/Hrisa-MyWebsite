@@ -178,6 +178,7 @@ export default function PhotographyPage() {
                 key={photographer.id}
                 resourceType="SECTION"
                 resourceId={photographer.folder}
+                hideIfNoAccess={true}
                 fallback={
                   <div className="mb-20 p-8 bg-sand-100 border-2 border-sand-200 rounded-xl text-center">
                     <div className="w-12 h-12 bg-sand-300 rounded-full flex items-center justify-center mx-auto mb-4">

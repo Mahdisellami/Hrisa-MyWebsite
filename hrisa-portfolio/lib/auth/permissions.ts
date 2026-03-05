@@ -42,9 +42,41 @@ export async function getProtectedResource(
 }
 
 /**
+ * Check if user has specific permission for a resource (section-based access)
+ */
+export async function checkUserResourcePermission(
+  userId: string,
+  resourceType: ResourceType,
+  resourceId: string
+): Promise<{ hasAccess: boolean; reason?: string }> {
+  const now = Math.floor(Date.now() / 1000);
+
+  const result = await db.execute({
+    sql: `SELECT * FROM user_resource_permissions
+          WHERE user_id = ? AND resource_type = ? AND resource_id = ?
+          AND (expires_at IS NULL OR expires_at > ?)`,
+    args: [userId, resourceType, resourceId, now]
+  });
+
+  if (result.rows.length === 0) {
+    return { hasAccess: false, reason: 'You do not have access to this section' };
+  }
+
+  const permission = result.rows[0] as any;
+
+  // Check if permission has expired
+  if (permission.expires_at && permission.expires_at <= now) {
+    return { hasAccess: false, reason: 'Your access to this section has expired' };
+  }
+
+  return { hasAccess: true };
+}
+
+/**
  * Check if user has access to a resource
  */
 export async function checkResourceAccess(
+  userId: string | null,
   userRole: Role | null,
   resourceType: ResourceType,
   resourceId: string
@@ -56,12 +88,17 @@ export async function checkResourceAccess(
     return { hasAccess: true };
   }
 
-  // If no user role (not logged in), deny access
-  if (!userRole) {
+  // If no user (not logged in), deny access
+  if (!userId || !userRole) {
     return { hasAccess: false, reason: 'Authentication required' };
   }
 
-  // Check if user role meets minimum requirement
+  // For SECTION resources, use granular permission-based access only
+  if (resourceType === 'SECTION') {
+    return await checkUserResourcePermission(userId, resourceType, resourceId);
+  }
+
+  // For other resource types, fall back to role-based access
   const hasAccess = hasPermission(userRole, resource.min_role as Role);
 
   return {
@@ -115,14 +152,15 @@ export async function checkShareLinkAccess(
  * Combined access check (user role OR share link)
  */
 export async function checkAccess(
+  userId: string | null,
   userRole: Role | null,
   shareToken: string | null,
   resourceType: ResourceType,
   resourceId: string
 ): Promise<{ hasAccess: boolean; reason?: string; method?: 'user' | 'share' }> {
-  // Try user role first
-  if (userRole) {
-    const userAccess = await checkResourceAccess(userRole, resourceType, resourceId);
+  // Try user-based access first
+  if (userId && userRole) {
+    const userAccess = await checkResourceAccess(userId, userRole, resourceType, resourceId);
     if (userAccess.hasAccess) {
       return { ...userAccess, method: 'user' };
     }
@@ -188,4 +226,79 @@ export async function unprotectResource(
           WHERE resource_type = ? AND resource_id = ?`,
     args: [resourceType, resourceId]
   });
+}
+
+/**
+ * Grant user permission to access a resource
+ */
+export async function grantResourcePermission(
+  userId: string,
+  resourceType: ResourceType,
+  resourceId: string,
+  grantedBy: string,
+  expiresAt?: number | null
+): Promise<void> {
+  const { nanoid } = require('nanoid');
+  const now = Math.floor(Date.now() / 1000);
+
+  // Check if permission already exists
+  const existing = await db.execute({
+    sql: `SELECT id FROM user_resource_permissions
+          WHERE user_id = ? AND resource_type = ? AND resource_id = ?`,
+    args: [userId, resourceType, resourceId]
+  });
+
+  if (existing.rows.length > 0) {
+    // Update existing permission
+    await db.execute({
+      sql: `UPDATE user_resource_permissions
+            SET expires_at = ?, granted_by = ?, granted_at = ?
+            WHERE user_id = ? AND resource_type = ? AND resource_id = ?`,
+      args: [expiresAt || null, grantedBy, now, userId, resourceType, resourceId]
+    });
+  } else {
+    // Create new permission
+    await db.execute({
+      sql: `INSERT INTO user_resource_permissions
+            (id, user_id, resource_type, resource_id, granted_by, granted_at, expires_at, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      args: [nanoid(), userId, resourceType, resourceId, grantedBy, now, expiresAt || null, now]
+    });
+  }
+}
+
+/**
+ * Revoke user permission to access a resource
+ */
+export async function revokeResourcePermission(
+  userId: string,
+  resourceType: ResourceType,
+  resourceId: string
+): Promise<void> {
+  await db.execute({
+    sql: `DELETE FROM user_resource_permissions
+          WHERE user_id = ? AND resource_type = ? AND resource_id = ?`,
+    args: [userId, resourceType, resourceId]
+  });
+}
+
+/**
+ * Get all permissions for a user
+ */
+export async function getUserPermissions(userId: string): Promise<Array<{
+  id: string;
+  resource_type: string;
+  resource_id: string;
+  granted_at: number;
+  expires_at: number | null;
+}>> {
+  const result = await db.execute({
+    sql: `SELECT id, resource_type, resource_id, granted_at, expires_at
+          FROM user_resource_permissions
+          WHERE user_id = ?
+          ORDER BY created_at DESC`,
+    args: [userId]
+  });
+
+  return result.rows as any[];
 }
