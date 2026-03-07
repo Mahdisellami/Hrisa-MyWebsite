@@ -18,7 +18,7 @@ async function migrateExistingUsers() {
       args: ['APPROVED']
     });
 
-    const users = usersResult.rows as Array<{ id: string; email: string; name: string | null }>;
+    const users = usersResult.rows as unknown as Array<{ id: string; email: string; name: string | null }>;
 
     if (users.length === 0) {
       console.log('⏭️  No approved users found to migrate');
@@ -33,7 +33,7 @@ async function migrateExistingUsers() {
       args: ['SECTION']
     });
 
-    const sections = resourcesResult.rows as Array<{ resource_id: string }>;
+    const sections = resourcesResult.rows as unknown as Array<{ resource_id: string }>;
 
     if (sections.length === 0) {
       console.log('⏭️  No protected sections found');
@@ -48,7 +48,7 @@ async function migrateExistingUsers() {
       args: ['ADMIN']
     });
 
-    const admin = adminResult.rows[0] as { id: string } | undefined;
+    const admin = adminResult.rows[0] as unknown as { id: string } | undefined;
 
     if (!admin) {
       console.error('❌ No ADMIN user found. Please create an admin user first.');

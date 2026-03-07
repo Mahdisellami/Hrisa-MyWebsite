@@ -9,8 +9,11 @@ Personal portfolio website showcasing ML/AI engineering, full-stack development 
 - **Styling**: Tailwind CSS (Harissa theme - warm, Tunisian-inspired colors)
 - **Animations**: Framer Motion
 - **Icons**: Lucide React
-- **Deployment**: Vercel (primary), Render (alternative)
-- **Local Dev**: Docker & Docker Compose
+- **Database**: Turso (LibSQL) - Edge database
+- **Authentication**: Magic Link (passwordless email authentication)
+- **Email**: Resend API
+- **Deployment**: Vercel
+- **Local Dev**: SQLite database
 
 ## Color Scheme: Harissa Warmth
 
@@ -22,49 +25,56 @@ Inspired by Tunisian harissa (chili paste) and South Tunisia:
 
 ## Quick Start
 
-### Local Development (npm)
+### Local Development Setup
 
+1. **Install dependencies**
 ```bash
-# Install dependencies
 npm install
+```
 
-# Run development server
+2. **Set up environment variables**
+   - Copy `.env.local` and add your API keys
+   - Get Resend API key from [resend.com](https://resend.com)
+
+3. **Initialize database**
+```bash
+# Initialize SQLite database and create tables
+npm run db:init
+
+# Seed protected resources
+npm run seed:protections
+
+# Create admin user
+npm run create:admin
+```
+
+4. **Run development server**
+```bash
 npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm start
-
-# Lint code
-npm run lint
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Docker Development
+### Available Scripts
 
 ```bash
-# Start development server with hot reload
-docker-compose up dev
+# Development
+npm run dev              # Start dev server
+npm run build            # Build for production
+npm start                # Start production server
+npm run lint             # Lint code
 
-# Stop
-docker-compose down
+# Database
+npm run db:init          # Initialize database schema
+npm run seed:protections # Seed protected resources
+npm run create:admin     # Create admin user
+npm run create:magic-link # Generate magic link for user
 
-# Test production build locally
-docker-compose --profile production up prod
+# Security
+npm run migrate:security # Run security migrations
+npm run migrate:existing-users # Migrate existing users
 ```
 
-### Docker Production Build
-
-```bash
-# Build production image
-docker build -t hrisa-portfolio .
-
-# Run production container
-docker run -p 3000:3000 hrisa-portfolio
-```
 
 ## Project Structure
 
@@ -98,13 +108,22 @@ hrisa-portfolio/
 
 ## Key Features
 
+### Security & Authentication
+- **Passwordless Authentication**: Magic link via email (no passwords to manage)
+- **Role-Based Access Control**: ADMIN, USER, GUEST, VISITOR roles
+- **Section-Based Permissions**: Granular access control per content section
+- **Rate Limiting**: Protection against brute force and abuse
+- **Audit Logging**: Complete activity tracking
+- **Secure Sessions**: HTTP-only cookies with expiration
+- **Share Links**: Temporary access tokens for sharing protected content
+
 ### Strategic Positioning
 - Freelance/consulting availability (subtle indicators)
 - Production-ready project showcase
 - Startup ideas/innovation lab
 - Multi-audience approach (clients, employers, collaborators)
 
-### Sections
+### Content Sections
 1. **Landing**: Hero, availability badge, CTAs, quick stats
 2. **Featured Work**: ArKI, KI-BAS, FinComp, agent-chat-ui
 3. **Professional**: Projects, publications, career timeline
@@ -115,27 +134,68 @@ hrisa-portfolio/
 
 ## Deployment
 
-### Vercel (Recommended)
+### Production Site
 
-1. Push to GitHub
-2. Connect repository to Vercel
-3. Auto-deploy on push to main
-4. Configure custom domain
+**Live URL**: [https://hrisa-portfolio.vercel.app](https://hrisa-portfolio.vercel.app)
 
-### Render (Alternative)
+### Vercel Deployment
 
-1. Connect GitHub repository
-2. Use Docker deployment
-3. Configure environment variables
-4. Set up custom domain
+The application is deployed on Vercel with automatic deployments from the `main` branch.
+
+**Environment Variables (Production)**:
+```env
+TURSO_DATABASE_URL=libsql://hrisa-portfolio-mahdisellami.aws-eu-west-1.turso.io
+TURSO_AUTH_TOKEN=<your-turso-token>
+RESEND_API_KEY=<your-resend-api-key>
+ADMIN_EMAIL=mahdi.sellami.95@gmail.com
+BASE_URL=https://hrisa-portfolio.vercel.app
+```
+
+### Deploy Updates
+
+```bash
+# Deploy to production
+vercel --prod
+
+# Preview deployment
+vercel
+```
 
 ## Environment Variables
 
-Create a `.env.local` file for local development:
+### Local Development (`.env.local`)
 
 ```env
-# Add environment variables as needed
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
+# Email Service (Resend)
+RESEND_API_KEY=re_your_api_key_here
+
+# Admin Configuration
+ADMIN_EMAIL=mahdi.sellami.95@gmail.com
+
+# Database (Local Development)
+DATABASE_PATH=./data/hrisa-portfolio.db
+
+# Application URL
+BASE_URL=http://localhost:3000
+```
+
+### Production (Vercel)
+
+Set these in the Vercel dashboard or via CLI:
+
+```env
+# Turso Cloud Database
+TURSO_DATABASE_URL=libsql://hrisa-portfolio-mahdisellami.aws-eu-west-1.turso.io
+TURSO_AUTH_TOKEN=<your-token>
+
+# Email Service
+RESEND_API_KEY=<your-key>
+
+# Admin Configuration
+ADMIN_EMAIL=mahdi.sellami.95@gmail.com
+
+# Application URL
+BASE_URL=https://hrisa-portfolio.vercel.app
 ```
 
 ## Development Guidelines
@@ -158,17 +218,36 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 ## Production Checklist
 
+### Initial Setup
+- [x] Deploy to Vercel
+- [x] Configure Turso database
+- [x] Set up environment variables
+- [x] Initialize database schema
+- [x] Create admin user
+- [ ] Configure custom domain (hrisa.tech)
+- [ ] Set up analytics
+
+### Content
 - [ ] Update all content in `/data` files
 - [ ] Add professional photos
 - [ ] Add project screenshots
 - [ ] Update publication PDFs
-- [ ] Configure contact form
-- [ ] Set up analytics
+- [ ] Verify protected sections configuration
+
+### Testing
+- [ ] Test authentication flow
 - [ ] Test all pages and links
+- [ ] Test admin dashboard
+- [ ] Test share links functionality
 - [ ] Optimize images
 - [ ] Run Lighthouse audit
-- [ ] Configure custom domain
-- [ ] Set up SSL certificate
+
+### Security
+- [x] Enable rate limiting
+- [x] Configure audit logging
+- [x] Set up secure sessions
+- [ ] Review user permissions
+- [ ] Test magic link emails
 
 ## License
 
