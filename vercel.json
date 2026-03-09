@@ -1,3 +1,7 @@
 {
+  "buildCommand": "cd hrisa-portfolio && npm run build",
+  "devCommand": "cd hrisa-portfolio && npm run dev",
+  "installCommand": "cd hrisa-portfolio && npm install",
+  "outputDirectory": "hrisa-portfolio/.next",
   "framework": "nextjs"
 }
