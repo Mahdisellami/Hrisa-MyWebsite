@@ -1,8 +1,4 @@
 import { Resend } from 'resend';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-
-const execAsync = promisify(exec);
 
 if (!process.env.RESEND_API_KEY) {
   console.warn('⚠️  RESEND_API_KEY not set. Email functionality will not work.');
@@ -23,35 +19,19 @@ export async function sendMagicLinkEmail(
   magicLink: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    // Workaround: Use curl since Node.js fetch has network issues
-    const payload = JSON.stringify({
+    const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to,
       subject: 'Your Magic Link to Hrisa Portfolio',
       html: renderMagicLinkEmail(magicLink),
     });
 
-    const command = `curl -s -X POST "https://api.resend.com/emails" \\
-      -H "Authorization: Bearer ${process.env.RESEND_API_KEY}" \\
-      -H "Content-Type: application/json" \\
-      -d '${payload.replace(/'/g, "'\\''")}'`;
-
-    const { stdout, stderr } = await execAsync(command);
-
-    if (stderr) {
-      console.error('Resend error:', stderr);
-      return { success: false, error: 'Failed to send email' };
+    if (error) {
+      console.error('Resend error:', error);
+      return { success: false, error: error.message };
     }
 
-    const response = JSON.parse(stdout);
-    if (response.id) {
-      console.log('Email sent successfully:', response.id);
-      return { success: true };
-    } else if (response.message) {
-      console.error('Resend error:', response);
-      return { success: false, error: response.message };
-    }
-
+    console.log('Email sent successfully:', data?.id);
     return { success: true };
   } catch (error: any) {
     console.error('Failed to send email:', error);
