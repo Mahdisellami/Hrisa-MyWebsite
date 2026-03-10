@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyMagicLink } from '@/lib/auth/magiclink';
-import { createSession, setSessionCookie } from '@/lib/auth/session';
+import { createSession } from '@/lib/auth/session';
 import { logAudit } from '@/lib/auth/audit';
 import { db } from '@/lib/db';
 
@@ -56,11 +56,6 @@ export async function GET(request: NextRequest) {
       args: [now, now, user.id]
     });
 
-    // Set session cookie
-    console.log('[Verify] Setting session cookie...');
-    await setSessionCookie(session.token);
-    console.log('[Verify] Session cookie set successfully');
-
     // Log audit event
     await logAudit({
       userId: user.id,
@@ -71,7 +66,20 @@ export async function GET(request: NextRequest) {
 
     // Redirect to dashboard or return URL
     const redirectUrl = searchParams.get('redirect') || '/dashboard';
-    return NextResponse.redirect(new URL(redirectUrl, request.url));
+    const response = NextResponse.redirect(new URL(redirectUrl, request.url));
+
+    // Set session cookie on the redirect response
+    console.log('[Verify] Setting session cookie on redirect...');
+    response.cookies.set('hrisa_session', session.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60, // 24 hours
+      path: '/',
+    });
+    console.log('[Verify] Session cookie set successfully');
+
+    return response;
   } catch (error) {
     console.error('[Verify] Error occurred:', error);
     console.error('[Verify] Error details:', {
