@@ -9,14 +9,19 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const token = searchParams.get('token');
 
+    console.log('[Verify] Starting verification, token present:', !!token);
+
     if (!token) {
       return NextResponse.redirect(new URL('/login?error=missing_token', request.url));
     }
 
     // Verify magic link
+    console.log('[Verify] Verifying magic link...');
     const verification = await verifyMagicLink(token);
+    console.log('[Verify] Verification result:', verification);
 
     if (!verification.valid || !verification.email) {
+      console.error('[Verify] Verification failed:', verification.error);
       return NextResponse.redirect(
         new URL(`/login?error=${encodeURIComponent(verification.error || 'invalid_token')}`, request.url)
       );
@@ -38,9 +43,11 @@ export async function GET(request: NextRequest) {
     }
 
     // Create session
+    console.log('[Verify] Creating session for user:', user.id);
     const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
     const userAgent = request.headers.get('user-agent');
     const session = await createSession(user.id, userAgent || undefined, ipAddress);
+    console.log('[Verify] Session created:', session.id);
 
     // Update last login
     const now = Math.floor(Date.now() / 1000);
@@ -50,7 +57,9 @@ export async function GET(request: NextRequest) {
     });
 
     // Set session cookie
+    console.log('[Verify] Setting session cookie...');
     await setSessionCookie(session.token);
+    console.log('[Verify] Session cookie set successfully');
 
     // Log audit event
     await logAudit({
@@ -64,7 +73,12 @@ export async function GET(request: NextRequest) {
     const redirectUrl = searchParams.get('redirect') || '/dashboard';
     return NextResponse.redirect(new URL(redirectUrl, request.url));
   } catch (error) {
-    console.error('Verify error:', error);
+    console.error('[Verify] Error occurred:', error);
+    console.error('[Verify] Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      error: JSON.stringify(error, null, 2)
+    });
     return NextResponse.redirect(new URL('/login?error=verification_failed', request.url));
   }
 }
