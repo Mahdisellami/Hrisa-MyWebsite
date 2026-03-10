@@ -19,6 +19,10 @@ export async function sendMagicLinkEmail(
   magicLink: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    console.log('[Resend] Attempting to send email to:', to);
+    console.log('[Resend] API Key present:', !!process.env.RESEND_API_KEY);
+    console.log('[Resend] From:', FROM_EMAIL);
+
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to,
@@ -27,14 +31,20 @@ export async function sendMagicLinkEmail(
     });
 
     if (error) {
-      console.error('Resend error:', error);
+      console.error('[Resend] API error:', error);
+      console.error('[Resend] Error details:', JSON.stringify(error, null, 2));
       return { success: false, error: error.message };
     }
 
-    console.log('Email sent successfully:', data?.id);
+    console.log('[Resend] Email sent successfully:', data?.id);
     return { success: true };
   } catch (error: any) {
-    console.error('Failed to send email:', error);
+    console.error('[Resend] Exception:', error);
+    console.error('[Resend] Exception details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
     return { success: false, error: error.message };
   }
 }

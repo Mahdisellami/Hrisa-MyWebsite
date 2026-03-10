@@ -71,12 +71,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate magic link
+    console.log('[Login] Generating magic link for:', email);
     const magicLink = await generateMagicLink(email, ipAddress);
     const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
     const magicLinkUrl = `${baseUrl}/verify?token=${magicLink.token}`;
+    console.log('[Login] Magic link generated, sending email...');
 
     // Send email
     const emailResult = await sendMagicLinkEmail(email, magicLinkUrl);
+    console.log('[Login] Email send result:', emailResult);
 
     if (!emailResult.success) {
       console.error('Failed to send magic link email:', emailResult.error);
@@ -100,6 +103,11 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Login error:', error);
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      error: JSON.stringify(error, null, 2)
+    });
     return NextResponse.json({
       success: false,
       message: 'An error occurred. Please try again.',
