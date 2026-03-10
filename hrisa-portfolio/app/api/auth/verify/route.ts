@@ -85,17 +85,9 @@ export async function GET(request: NextRequest) {
     const errorDetails = {
       message: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
-      name: error instanceof Error ? error.name : undefined,
-      error: JSON.stringify(error, null, 2)
+      name: error instanceof Error ? error.name : undefined
     };
     console.error('[Verify] Error details:', errorDetails);
-
-    // Return JSON error for debugging (temporary)
-    return NextResponse.json({
-      success: false,
-      error: 'verification_failed',
-      details: errorDetails,
-      timestamp: new Date().toISOString()
-    }, { status: 500 });
+    return NextResponse.redirect(new URL('/login?error=verification_failed', request.url));
   }
 }
