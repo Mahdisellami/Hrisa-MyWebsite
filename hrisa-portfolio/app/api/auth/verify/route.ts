@@ -82,11 +82,20 @@ export async function GET(request: NextRequest) {
     return response;
   } catch (error) {
     console.error('[Verify] Error occurred:', error);
-    console.error('[Verify] Error details:', {
+    const errorDetails = {
       message: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : undefined,
       error: JSON.stringify(error, null, 2)
-    });
-    return NextResponse.redirect(new URL('/login?error=verification_failed', request.url));
+    };
+    console.error('[Verify] Error details:', errorDetails);
+
+    // Return JSON error for debugging (temporary)
+    return NextResponse.json({
+      success: false,
+      error: 'verification_failed',
+      details: errorDetails,
+      timestamp: new Date().toISOString()
+    }, { status: 500 });
   }
 }
