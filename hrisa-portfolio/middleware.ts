@@ -32,7 +32,7 @@ export async function middleware(request: NextRequest) {
   const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
 
   if (isProtectedRoute) {
-    const sessionToken = request.cookies.get('hrisa_session')?.value;
+    const sessionToken = request.cookies.get('janette_session')?.value;
 
     if (!sessionToken) {
       const loginUrl = new URL('/login', request.url);

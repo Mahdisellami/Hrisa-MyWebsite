@@ -32,7 +32,7 @@ const roleHierarchy: Record<Role, number> = {
   ADMIN: 1,
 };
 
-const SHARE_TOKEN_KEY = 'hrisa_share_token';
+const SHARE_TOKEN_KEY = 'janette_share_token';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);

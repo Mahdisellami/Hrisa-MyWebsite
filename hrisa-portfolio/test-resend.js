@@ -8,9 +8,9 @@ async function testResend() {
     console.log('Testing Resend API connection...\n');
 
     const { data, error } = await resend.emails.send({
-      from: 'Hrisa Portfolio <onboarding@resend.dev>',
+      from: 'Janette <onboarding@resend.dev>',
       to: 'mahdi.sellami.95@gmail.com',
-      subject: 'Test Email from Hrisa Portfolio',
+      subject: 'Test Email from Janette',
       html: '<p>This is a test email to verify Resend is working!</p>',
     });
 

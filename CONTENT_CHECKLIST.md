@@ -6,29 +6,29 @@
 
 #### Professional Photo
 - [ ] **Your headshot/professional photo**
-  - Location: `hrisa-portfolio/public/images/mahdi-profile.jpg`
+  - Location: `janette-portfolio/public/images/mahdi-profile.jpg`
   - Recommended size: 800x800px or larger (square)
   - Format: JPG or PNG
   - Purpose: About page, possibly header
 
 #### Project Screenshots (4 projects)
 - [ ] **ArKI Screenshot**
-  - Location: `hrisa-portfolio/public/images/projects/arki.jpg`
+  - Location: `janette-portfolio/public/images/projects/arki.jpg`
   - Recommended size: 1200x800px (landscape)
   - Shows: Dashboard, ML pipeline, or key interface
 
 - [ ] **KI-BAS Screenshot**
-  - Location: `hrisa-portfolio/public/images/projects/ki-bas.jpg`
+  - Location: `janette-portfolio/public/images/projects/ki-bas.jpg`
   - Recommended size: 1200x800px
   - Shows: Chat interface, document upload, or RAG in action
 
 - [ ] **FinComp Screenshot**
-  - Location: `hrisa-portfolio/public/images/projects/fincomp.jpg`
+  - Location: `janette-portfolio/public/images/projects/fincomp.jpg`
   - Recommended size: 1200x800px
   - Shows: Knowledge graph, SPARQL interface, or ontology visualization
 
 - [ ] **agent-chat-ui Screenshot**
-  - Location: `hrisa-portfolio/public/images/projects/agent-chat-ui.jpg`
+  - Location: `janette-portfolio/public/images/projects/agent-chat-ui.jpg`
   - Recommended size: 1200x800px
   - Shows: Chat interface, LangGraph integration
 
@@ -36,13 +36,13 @@
 
 #### CV/Resume
 - [ ] **Your CV as PDF**
-  - Location: `hrisa-portfolio/public/docs/Mahdi_Sellami_CV.pdf`
+  - Location: `janette-portfolio/public/docs/Mahdi_Sellami_CV.pdf`
   - Format: PDF
   - Should be up-to-date with recent projects
 
 #### Favicon
 - [ ] **Site favicon (optional but nice)**
-  - Location: `hrisa-portfolio/public/favicon.ico`
+  - Location: `janette-portfolio/public/favicon.ico`
   - Size: 32x32px or 64x64px
   - Can use "H" or "MS" logo with Harissa colors
 
@@ -50,35 +50,35 @@
 
 #### Photography
 - [ ] **10-20 of your best photos**
-  - Location: `hrisa-portfolio/public/images/photography/`
+  - Location: `janette-portfolio/public/images/photography/`
   - Names: `photo-01.jpg`, `photo-02.jpg`, etc.
   - Variety: portraits, landscapes, events, etc.
 
 #### Music
 - [ ] **Photos of you performing/with instruments**
-  - Location: `hrisa-portfolio/public/images/music/`
+  - Location: `janette-portfolio/public/images/music/`
   - Could include: performance shots, instrument close-ups
 
 #### Theatre
 - [ ] **Performance photos**
-  - Location: `hrisa-portfolio/public/images/theatre/`
+  - Location: `janette-portfolio/public/images/theatre/`
   - Could include: stage photos, backstage, posters
 
 #### Art (Drawing/Painting)
 - [ ] **Photos of your artwork**
-  - Location: `hrisa-portfolio/public/images/art/`
+  - Location: `janette-portfolio/public/images/art/`
   - High-quality photos of drawings/paintings
 
 #### Sports/Dance
 - [ ] **Action shots or team photos**
-  - Location: `hrisa-portfolio/public/images/sports/`
+  - Location: `janette-portfolio/public/images/sports/`
 
 ---
 
 ## 📁 Folder Structure
 
 ```
-hrisa-portfolio/public/
+janette-portfolio/public/
 ├── images/
 │   ├── mahdi-profile.jpg          ← Your photo
 │   ├── projects/
@@ -118,7 +118,7 @@ hrisa-portfolio/public/
 ### Step 2: Add to Project
 ```bash
 # Navigate to your project
-cd /Users/peng/Documents/mse/private/Hrisa-MyWebsite/hrisa-portfolio/public/images
+cd /Users/peng/Documents/mse/private/Hrisa-MyWebsite/janette-portfolio/public/images
 
 # Copy your images
 # Example:
@@ -206,11 +206,11 @@ I'll update the code to use these images once you add them!
 If you have research publications:
 
 ### PDF Files
-- Location: `hrisa-portfolio/public/docs/publications/`
+- Location: `janette-portfolio/public/docs/publications/`
 - Names: `paper-title-2024.pdf`
 
 ### Publication Data
-- Add to: `hrisa-portfolio/data/publications.ts` (I'll create this)
+- Add to: `janette-portfolio/data/publications.ts` (I'll create this)
 - Include: Title, authors, venue, year, abstract, PDF link
 
 ---

@@ -26,7 +26,7 @@ const protectedResources = [
   { type: 'SECTION', id: 'fortiss-gmbh', role: 'EDITOR' },
 
   // Professional projects
-  { type: 'PROJECT', id: 'hrisa-code', role: 'EDITOR' },
+  { type: 'PROJECT', id: 'janette-code', role: 'EDITOR' },
   { type: 'PROJECT', id: 'gamza-tounsia', role: 'EDITOR' },
 ];
 

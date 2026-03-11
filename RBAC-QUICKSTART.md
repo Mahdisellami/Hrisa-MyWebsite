@@ -66,9 +66,9 @@ ADMIN_EMAIL=your.actual@email.com
 ### Step 2: Create Admin User (2 minutes)
 
 ```bash
-# Make sure you're in the hrisa-portfolio directory
+# Make sure you're in the janette-portfolio directory
 pwd
-# Should show: /Users/peng/Documents/mse/private/Hrisa-MyWebsite/hrisa-portfolio
+# Should show: /Users/peng/Documents/mse/private/Hrisa-MyWebsite/janette-portfolio
 
 # Run the script with YOUR email
 npm run create:admin -- --email=your.actual@email.com
@@ -243,7 +243,7 @@ npm run dev
 3. Try logging out and back in
 4. Check user is ADMIN:
    ```bash
-   sqlite3 data/hrisa-portfolio.db "SELECT * FROM users WHERE email='your@email.com';"
+   sqlite3 data/janette-portfolio.db "SELECT * FROM users WHERE email='your@email.com';"
    # Should show role='ADMIN' and status='APPROVED'
    ```
 
@@ -353,7 +353,7 @@ http://localhost:3000/admin
 npm run seed:protections
 
 # Optional: View database
-sqlite3 data/hrisa-portfolio.db
+sqlite3 data/janette-portfolio.db
 .tables
 SELECT * FROM users;
 SELECT * FROM protected_resources;

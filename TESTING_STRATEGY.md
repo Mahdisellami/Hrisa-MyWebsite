@@ -1,7 +1,7 @@
 # Comprehensive Testing Strategy
 
 ## Overview
-This document outlines the testing strategy for the Hrisa Portfolio website, covering unit tests, integration tests, regression tests, smoke tests, end-to-end tests, UI tests, and manual testing procedures.
+This document outlines the testing strategy for the Janette website, covering unit tests, integration tests, regression tests, smoke tests, end-to-end tests, UI tests, and manual testing procedures.
 
 ## Testing Philosophy
 
@@ -384,7 +384,7 @@ test.describe('Admin Workflows', () => {
   test.beforeEach(async ({ page }) => {
     // Login as admin
     await page.goto('/admin/login');
-    await page.fill('[name="email"]', 'admin@hrisa.com');
+    await page.fill('[name="email"]', 'admin@janette.technology');
     await page.fill('[name="password"]', 'test-password');
     await page.click('button[type="submit"]');
     await expect(page).toHaveURL('/admin/dashboard');

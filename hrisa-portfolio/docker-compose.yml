@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    container_name: hrisa-portfolio-dev
+    container_name: janette-portfolio-dev
     ports:
       - "3000:3000"
     volumes:
@@ -21,23 +21,23 @@ services:
     stdin_open: true
     tty: true
     networks:
-      - hrisa-network
+      - janette-network
 
   # Production service (for testing production build locally)
   prod:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: hrisa-portfolio-prod
+    container_name: janette-portfolio-prod
     ports:
       - "3001:3000"
     environment:
       - NODE_ENV=production
     networks:
-      - hrisa-network
+      - janette-network
     profiles:
       - production
 
 networks:
-  hrisa-network:
+  janette-network:
     driver: bridge

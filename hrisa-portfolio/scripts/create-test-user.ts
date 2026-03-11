@@ -3,7 +3,7 @@
 import { db } from '../lib/db/index.js';
 import { nanoid } from 'nanoid';
 
-const email = process.argv[2] || 'test@hrisa.tech';
+const email = process.argv[2] || 'test@janette.technology';
 const role = process.argv[3] || 'EDITOR';
 
 async function createTestUser(emailAddress: string, userRole: string) {

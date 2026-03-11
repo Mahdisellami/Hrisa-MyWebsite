@@ -8,8 +8,8 @@ if (!process.env.RESEND_API_KEY) {
 export const resend = new Resend(process.env.RESEND_API_KEY || 're_dummy_key_for_build');
 
 // Using Resend's onboarding domain for testing
-// TODO: Update to 'Hrisa Portfolio <noreply@hrisa.tech>' after verifying domain
-export const FROM_EMAIL = 'Hrisa Portfolio <onboarding@resend.dev>';
+// TODO: Update to 'Janette <noreply@janette.technology>' after verifying domain
+export const FROM_EMAIL = 'Janette <onboarding@resend.dev>';
 
 /**
  * Send magic link email
@@ -26,7 +26,7 @@ export async function sendMagicLinkEmail(
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to,
-      subject: 'Your Magic Link to Hrisa Portfolio',
+      subject: 'Your Magic Link to Janette',
       html: renderMagicLinkEmail(magicLink),
     });
 
@@ -98,7 +98,7 @@ export async function sendRegistrationApprovedEmail(
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to,
-      subject: 'Welcome to Hrisa Portfolio - Access Approved!',
+      subject: 'Welcome to Janette - Access Approved!',
       html: renderRegistrationApprovedEmail(name, baseUrl),
     });
 
@@ -125,7 +125,7 @@ export async function sendRegistrationRejectedEmail(
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to,
-      subject: 'Hrisa Portfolio Access Request Update',
+      subject: 'Janette Access Request Update',
       html: renderRegistrationRejectedEmail(name),
     });
 
@@ -162,7 +162,7 @@ function renderMagicLinkEmail(magicLink: string): string {
       <body>
         <div class="container">
           <div class="header">
-            <h1>Hrisa Portfolio</h1>
+            <h1>Janette</h1>
           </div>
           <div class="content">
             <h2 style="color: #382c22; margin-bottom: 20px;">Your Magic Link</h2>
@@ -173,7 +173,7 @@ function renderMagicLinkEmail(magicLink: string): string {
             <p style="color: #9d8160; font-size: 14px;">If you didn't request this link, you can safely ignore this email.</p>
           </div>
           <div class="footer">
-            <p style="margin: 0;">© 2026 Hrisa Portfolio. All rights reserved.</p>
+            <p style="margin: 0;">© 2026 Janette. All rights reserved.</p>
           </div>
         </div>
       </body>
@@ -243,7 +243,7 @@ function renderRegistrationApprovedEmail(name: string, baseUrl: string): string 
           </div>
           <div class="content">
             <h2 style="color: #382c22;">Welcome, ${name}!</h2>
-            <p>Your access request has been approved. You can now explore the full Hrisa Portfolio.</p>
+            <p>Your access request has been approved. You can now explore the full Janette platform.</p>
             <div style="text-align: center; margin: 40px 0;">
               <a href="${baseUrl}/login" class="button">Log In Now</a>
             </div>
@@ -272,14 +272,14 @@ function renderRegistrationRejectedEmail(name: string): string {
       <body>
         <div class="container">
           <div class="header">
-            <h1>Hrisa Portfolio</h1>
+            <h1>Janette</h1>
           </div>
           <div class="content">
             <h2 style="color: #382c22;">Access Request Update</h2>
             <p>Hi ${name},</p>
-            <p>Thank you for your interest in accessing the Hrisa Portfolio. Unfortunately, we're unable to approve your request at this time.</p>
+            <p>Thank you for your interest in accessing Janette. Unfortunately, we're unable to approve your request at this time.</p>
             <p>If you believe this is an error, please feel free to reach out directly.</p>
-            <p style="color: #6a5644; margin-top: 30px;">Best regards,<br>Hrisa Portfolio Team</p>
+            <p style="color: #6a5644; margin-top: 30px;">Best regards,<br>Janette Team</p>
           </div>
         </div>
       </body>

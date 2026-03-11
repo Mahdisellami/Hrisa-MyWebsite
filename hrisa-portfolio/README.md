@@ -1,4 +1,4 @@
-# Hrisa Portfolio
+# Janette
 
 Personal portfolio website showcasing ML/AI engineering, full-stack development work, and entrepreneurial ventures.
 
@@ -79,7 +79,7 @@ npm run migrate:existing-users # Migrate existing users
 ## Project Structure
 
 ```
-hrisa-portfolio/
+janette-portfolio/
 ├── app/                    # Next.js App Router
 │   ├── layout.tsx         # Root layout
 │   ├── page.tsx           # Landing page
@@ -128,7 +128,7 @@ hrisa-portfolio/
 2. **Featured Work**: ArKI, KI-BAS, FinComp, agent-chat-ui
 3. **Professional**: Projects, publications, career timeline
 4. **Services/Expertise**: ML/AI, Full-Stack, MLOps, Architecture
-5. **Ventures**: Hrisa Agents, Hrisa Code, Hrisa HR Platform
+5. **Ventures**: Janette Agents, Janette Code, Janette HR Platform
 6. **Hobbies**: Photography, Music, Theatre, Art, Sports
 7. **About/Contact**: Bio, skills, contact form
 
@@ -136,7 +136,7 @@ hrisa-portfolio/
 
 ### Production Site
 
-**Live URL**: [https://hrisa-portfolio.vercel.app](https://hrisa-portfolio.vercel.app)
+**Live URL**: [https://janette-portfolio.vercel.app](https://janette-portfolio.vercel.app)
 
 ### Vercel Deployment
 
@@ -144,11 +144,11 @@ The application is deployed on Vercel with automatic deployments from the `main`
 
 **Environment Variables (Production)**:
 ```env
-TURSO_DATABASE_URL=libsql://hrisa-portfolio-mahdisellami.aws-eu-west-1.turso.io
+TURSO_DATABASE_URL=libsql://janette-portfolio-mahdisellami.aws-eu-west-1.turso.io
 TURSO_AUTH_TOKEN=<your-turso-token>
 RESEND_API_KEY=<your-resend-api-key>
 ADMIN_EMAIL=mahdi.sellami.95@gmail.com
-BASE_URL=https://hrisa-portfolio.vercel.app
+BASE_URL=https://janette-portfolio.vercel.app
 ```
 
 ### Deploy Updates
@@ -173,7 +173,7 @@ RESEND_API_KEY=re_your_api_key_here
 ADMIN_EMAIL=mahdi.sellami.95@gmail.com
 
 # Database (Local Development)
-DATABASE_PATH=./data/hrisa-portfolio.db
+DATABASE_PATH=./data/janette-portfolio.db
 
 # Application URL
 BASE_URL=http://localhost:3000
@@ -185,7 +185,7 @@ Set these in the Vercel dashboard or via CLI:
 
 ```env
 # Turso Cloud Database
-TURSO_DATABASE_URL=libsql://hrisa-portfolio-mahdisellami.aws-eu-west-1.turso.io
+TURSO_DATABASE_URL=libsql://janette-portfolio-mahdisellami.aws-eu-west-1.turso.io
 TURSO_AUTH_TOKEN=<your-token>
 
 # Email Service
@@ -195,7 +195,7 @@ RESEND_API_KEY=<your-key>
 ADMIN_EMAIL=mahdi.sellami.95@gmail.com
 
 # Application URL
-BASE_URL=https://hrisa-portfolio.vercel.app
+BASE_URL=https://janette-portfolio.vercel.app
 ```
 
 ## Development Guidelines
@@ -224,7 +224,7 @@ BASE_URL=https://hrisa-portfolio.vercel.app
 - [x] Set up environment variables
 - [x] Initialize database schema
 - [x] Create admin user
-- [ ] Configure custom domain (hrisa.tech)
+- [ ] Configure custom domain (janette.technology)
 - [ ] Set up analytics
 
 ### Content

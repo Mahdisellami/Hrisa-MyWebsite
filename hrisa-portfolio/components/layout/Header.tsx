@@ -42,10 +42,10 @@ export function Header() {
             className="flex items-center gap-2 group"
           >
             <div className="w-10 h-10 bg-gradient-to-br from-brand-500 to-terracotta-500 rounded-lg flex items-center justify-center font-display font-bold text-white text-xl transition-transform group-hover:scale-110">
-              H
+              J
             </div>
             <span className="text-xl font-display font-bold text-sand-950">
-              Hrisa
+              Janette
             </span>
           </Link>
 

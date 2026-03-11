@@ -18,7 +18,7 @@ export default function DashboardPage() {
               Welcome back, {user?.name || user?.email}!
             </h1>
             <p className="text-sand-600">
-              You now have access to the full Hrisa Portfolio.
+              You now have access to the full Janette platform.
             </p>
           </div>
 

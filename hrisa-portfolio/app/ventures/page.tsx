@@ -10,19 +10,19 @@ export const metadata = {
 export default function VenturesPage() {
   const ventureIdeas = [
     {
-      name: 'Hrisa Agents',
+      name: 'Janette Agents',
       tagline: 'Building the future of autonomous AI systems',
       status: 'Ongoing Research',
       icon: Rocket,
     },
     {
-      name: 'Hrisa Code',
+      name: 'Janette Code',
       tagline: 'AI-powered code understanding for enterprise codebases',
       status: 'Conceptual Phase',
       icon: Lightbulb,
     },
     {
-      name: 'Hrisa HR Platform',
+      name: 'Janette HR',
       tagline: 'AI-powered talent management and recruitment intelligence',
       status: 'Early Exploration',
       icon: Users,
@@ -90,21 +90,21 @@ export default function VenturesPage() {
                 <li className="flex items-start gap-3">
                   <span className="text-brand-500 font-bold mt-1">•</span>
                   <span>
-                    <strong>Hrisa Agents</strong> - Making agentic AI systems accessible for production use,
+                    <strong>Janette Agents</strong> - Making agentic AI systems accessible for production use,
                     based on hands-on experience building AI agents.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-brand-500 font-bold mt-1">•</span>
                   <span>
-                    <strong>Hrisa Code</strong> - Addressing the challenge of understanding large codebases
+                    <strong>Janette Code</strong> - Addressing the challenge of understanding large codebases
                     with AI-powered semantic search and analysis.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-brand-500 font-bold mt-1">•</span>
                   <span>
-                    <strong>Hrisa HR</strong> - Using AI to make hiring more fair, efficient, and data-driven
+                    <strong>Janette HR</strong> - Using AI to make hiring more fair, efficient, and data-driven
                     while keeping humans in the loop.
                   </span>
                 </li>

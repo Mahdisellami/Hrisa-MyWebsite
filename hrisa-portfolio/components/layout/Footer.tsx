@@ -19,7 +19,7 @@ export function Footer() {
           {/* About Column */}
           <div>
             <h3 className="text-lg font-display font-bold text-sand-950 mb-4">
-              Hrisa
+              Janette
             </h3>
             <p className="text-sand-600 text-sm mb-4">
               Building the future with AI and innovative solutions.

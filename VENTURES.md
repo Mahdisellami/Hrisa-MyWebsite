@@ -1,11 +1,11 @@
-# Hrisa Ventures - Startup Ideas
+# Janette Ventures - Startup Ideas
 
 ## Overview
 This document captures the startup/innovation ideas to be featured in the Ventures section of the portfolio website.
 
 ---
 
-## 1. Hrisa Agents
+## 1. Janette Agents
 
 ### Concept
 [To be defined - Agentic AI systems/framework?]
@@ -39,7 +39,7 @@ This document captures the startup/innovation ideas to be featured in the Ventur
 
 ---
 
-## 2. Hrisa Code
+## 2. Janette Code
 
 ### Concept
 [To be defined - Developer tools? Code generation? AI-assisted coding?]
@@ -72,7 +72,7 @@ This document captures the startup/innovation ideas to be featured in the Ventur
 
 ---
 
-## 3. Hrisa HR Platform
+## 3. Janette HR Platform
 
 ### Concept
 [To be defined - HR tech solution? Recruitment? People management?]
@@ -139,17 +139,17 @@ For each venture, we need to define:
 
 ## Questions for User
 
-**Hrisa Agents**:
+**Janette Agents**:
 1. Is this about building AI agent systems/frameworks?
 2. Is it related to your agent-chat-ui project?
 3. What specific problem in the agentic AI space are you solving?
 
-**Hrisa Code**:
+**Janette Code**:
 1. Is this developer tooling? Code generation? AI coding assistant?
 2. What makes it different from existing tools?
 3. What's the core innovation?
 
-**Hrisa HR Platform**:
+**Janette HR Platform**:
 1. What aspect of HR are you focusing on (recruiting, management, analytics)?
 2. How does AI/ML fit into this?
 3. What's your unique angle?
@@ -167,7 +167,7 @@ For each venture, we need to define:
 Display format:
 ```
 [Icon/Logo]
-Hrisa [Name]
+Janette [Name]
 "Elevator pitch tagline"
 
 The Problem: [Brief problem statement]
@@ -187,8 +187,8 @@ Looking for: [Collaborators/Feedback/Early adopters]
 - Link each venture to your relevant expertise
 - Show that you're the right person to build this
 - Examples:
-  - "Hrisa Agents leverages my experience building production AI systems like ArKI and KI-BAS"
-  - "Hrisa Code draws on my full-stack expertise across multiple modern frameworks"
+  - "Janette Agents leverages my experience building production AI systems like ArKI and KI-BAS"
+  - "Janette Code draws on my full-stack expertise across multiple modern frameworks"
 
 ---
 

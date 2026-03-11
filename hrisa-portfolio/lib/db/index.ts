@@ -15,7 +15,7 @@ if (process.env.TURSO_DATABASE_URL && process.env.TURSO_AUTH_TOKEN) {
   });
 } else {
   // Local development: Use local SQLite file
-  const dbPath = process.env.DATABASE_PATH || path.join(process.cwd(), 'data', 'hrisa-portfolio.db');
+  const dbPath = process.env.DATABASE_PATH || path.join(process.cwd(), 'data', 'janette-portfolio.db');
   db = createClient({
     url: `file:${dbPath}`,
   });

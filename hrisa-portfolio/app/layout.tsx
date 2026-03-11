@@ -16,7 +16,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Hrisa | Mahdi Sellami - ML Engineer & Full-Stack Developer",
+  title: "Janette | Mahdi Sellami - ML Engineer & Full-Stack Developer",
   description: "Portfolio of Mahdi Sellami - ML/AI Engineer, Full-Stack Developer, and entrepreneur. Specializing in agentic systems, RAG, MLOps, and production AI solutions.",
   keywords: ["ML Engineer", "AI Engineer", "Full-Stack Developer", "RAG Systems", "Agentic AI", "MLOps", "Python", "React", "Next.js"],
   authors: [{ name: "Mahdi Sellami" }],
@@ -24,14 +24,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://hrisa.com",
-    title: "Hrisa | Mahdi Sellami",
+    url: "https://janette.technology",
+    title: "Janette | Mahdi Sellami",
     description: "ML/AI Engineer, Full-Stack Developer, and entrepreneur building production AI systems.",
-    siteName: "Hrisa",
+    siteName: "Janette",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hrisa | Mahdi Sellami",
+    title: "Janette | Mahdi Sellami",
     description: "ML/AI Engineer, Full-Stack Developer, and entrepreneur building production AI systems.",
   },
   robots: {

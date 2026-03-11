@@ -11,7 +11,7 @@ async function generateTestLink() {
     console.log('🔗 Generating test magic link for:', email);
 
     const magicLink = await generateMagicLink(email, 'test-script');
-    const baseUrl = process.env.BASE_URL || 'https://www.hrisa.tech';
+    const baseUrl = process.env.BASE_URL || 'https://janette.technology';
     const magicLinkUrl = `${baseUrl}/verify?token=${magicLink.token}`;
 
     console.log('\n✅ Magic link generated!');

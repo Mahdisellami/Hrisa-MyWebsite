@@ -1,7 +1,7 @@
 # Production Deployment Guide
 
 ## Overview
-This guide covers deploying the Hrisa Portfolio to Vercel with full RBAC functionality.
+This guide covers deploying the Janette to Vercel with full RBAC functionality.
 
 ---
 
@@ -10,7 +10,7 @@ This guide covers deploying the Hrisa Portfolio to Vercel with full RBAC functio
 1. **Vercel Account**: https://vercel.com
 2. **Turso Account** (for production database): https://turso.tech
 3. **Resend Account** (for emails): https://resend.com
-4. **Domain**: hrisa.tech configured in Vercel
+4. **Domain**: janette.technology configured in Vercel
 
 ---
 
@@ -38,13 +38,13 @@ turso auth login
 
 ```bash
 # Create database
-turso db create hrisa-portfolio --location nrt  # Tokyo region
+turso db create janette-portfolio --location nrt  # Tokyo region
 
 # Get database URL
-turso db show hrisa-portfolio --url
+turso db show janette-portfolio --url
 
 # Create auth token
-turso db tokens create hrisa-portfolio
+turso db tokens create janette-portfolio
 ```
 
 **Save these values:**
@@ -55,7 +55,7 @@ turso db tokens create hrisa-portfolio
 
 ```bash
 # Connect to Turso shell
-turso db shell hrisa-portfolio
+turso db shell janette-portfolio
 
 # Copy and paste the entire schema from lib/db/schema.sql
 # Then exit
@@ -81,7 +81,7 @@ export TURSO_DATABASE_URL="libsql://your-database.turso.io"
 export TURSO_AUTH_TOKEN="your-token"
 
 # Create admin
-npm run create:admin -- --email=noreply@hrisa.tech
+npm run create:admin -- --email=noreply@janette.technology
 ```
 
 ---
@@ -99,7 +99,7 @@ npm run create:admin -- --email=noreply@hrisa.tech
 
 **Root Directory:**
 - Click "Edit"
-- Set to: `hrisa-portfolio`
+- Set to: `janette-portfolio`
 
 **Framework:**
 - Should auto-detect as "Next.js"
@@ -120,10 +120,10 @@ Click **"Environment Variables"** and add:
 RESEND_API_KEY=re_acpfkyF9_NznUSqjVYyWQb4mfMZ8Kbe8P
 
 # Admin Configuration
-ADMIN_EMAIL=noreply@hrisa.tech
+ADMIN_EMAIL=noreply@janette.technology
 
 # Application URL (update after deployment)
-BASE_URL=https://hrisa.tech
+BASE_URL=https://janette.technology
 
 # Turso Database (Production)
 TURSO_DATABASE_URL=libsql://your-database.turso.io
@@ -149,12 +149,12 @@ Wait for deployment to complete (2-5 minutes)
 
 1. Go to Project Settings → Domains
 2. Click **"Add Domain"**
-3. Enter: `hrisa.tech`
+3. Enter: `janette.technology`
 4. Vercel will provide DNS records
 
 ### 3b. Update DNS (if needed)
 
-Your hrisa.tech domain should already have:
+Your janette.technology domain should already have:
 - A record or CNAME pointing to Vercel
 - MX records for email forwarding (ImprovMX)
 - TXT records for Resend email
@@ -167,7 +167,7 @@ After domain is connected:
 
 1. Go to Project Settings → Environment Variables
 2. Edit `BASE_URL`
-3. Change to: `https://hrisa.tech`
+3. Change to: `https://janette.technology`
 4. Redeploy (Deployments → Latest → Redeploy)
 
 ---
@@ -176,20 +176,20 @@ After domain is connected:
 
 ### 4a. Test Homepage
 
-Visit: https://hrisa.tech
+Visit: https://janette.technology
 
 Should load without errors.
 
 ### 4b. Test Login
 
-1. Visit: https://hrisa.tech/login
-2. Enter: noreply@hrisa.tech
+1. Visit: https://janette.technology/login
+2. Enter: noreply@janette.technology
 3. Check Gmail for magic link (forwarded via ImprovMX)
 4. Click link to login
 
 ### 4c. Test Admin Panel
 
-1. After logging in, visit: https://hrisa.tech/admin
+1. After logging in, visit: https://janette.technology/admin
 2. Should see dashboard with stats
 3. Verify all admin features work:
    - Users
@@ -200,7 +200,7 @@ Should load without errors.
 ### 4d. Test Protected Resources
 
 1. Log out or use incognito
-2. Try accessing: https://hrisa.tech/hobbies/photography
+2. Try accessing: https://janette.technology/hobbies/photography
 3. Should be blocked (requires ADMIN)
 4. Login and try again - should work
 
@@ -244,7 +244,7 @@ Create a Vercel Cron Job to clean expired sessions/links:
 **Solution:**
 1. Verify `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` are set in Vercel
 2. Check Turso dashboard: database is active
-3. Regenerate token if needed: `turso db tokens create hrisa-portfolio`
+3. Regenerate token if needed: `turso db tokens create janette-portfolio`
 
 ### Email Not Sending
 
@@ -253,7 +253,7 @@ Create a Vercel Cron Job to clean expired sessions/links:
 **Solution:**
 1. Verify `RESEND_API_KEY` is set in Vercel
 2. Check Resend dashboard: API key is valid
-3. Verify domain (hrisa.tech) is verified in Resend
+3. Verify domain (janette.technology) is verified in Resend
 4. Check Resend email logs
 
 ### Admin Access Denied
@@ -273,7 +273,7 @@ Create a Vercel Cron Job to clean expired sessions/links:
 1. Check build logs in Vercel dashboard
 2. Verify all dependencies are in `package.json`
 3. Ensure TypeScript errors are fixed
-4. Check that root directory is set to `hrisa-portfolio`
+4. Check that root directory is set to `janette-portfolio`
 
 ---
 
@@ -284,7 +284,7 @@ Before going live:
 - [ ] All environment variables are set in Vercel (Production)
 - [ ] `.env.local` is NOT committed to git (check `.gitignore`)
 - [ ] Turso database has admin user created
-- [ ] Resend domain (hrisa.tech) is verified
+- [ ] Resend domain (janette.technology) is verified
 - [ ] Email forwarding (ImprovMX) is working
 - [ ] Admin panel requires ADMIN role (level 1)
 - [ ] Protected resources require appropriate roles
@@ -307,7 +307,7 @@ Before going live:
 For schema changes:
 
 1. Update `lib/db/schema.sql`
-2. Connect to Turso shell: `turso db shell hrisa-portfolio`
+2. Connect to Turso shell: `turso db shell janette-portfolio`
 3. Run migration SQL manually
 4. Or create migration script in `scripts/migrations/`
 
@@ -315,7 +315,7 @@ For schema changes:
 
 ```bash
 # Export database
-turso db shell hrisa-portfolio ".backup hrisa-backup.db"
+turso db shell janette-portfolio ".backup hrisa-backup.db"
 ```
 
 ### Monitor Email Delivery

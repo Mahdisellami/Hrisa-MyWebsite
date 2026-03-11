@@ -20,7 +20,7 @@ All tables implemented:
 - ✅ `audit_log` - Security audit trail for all actions
 
 **Database:** SQLite (local) / Turso (production)
-**File:** `data/hrisa-portfolio.db` exists and is initialized
+**File:** `data/janette-portfolio.db` exists and is initialized
 
 ---
 
@@ -188,7 +188,7 @@ npm run db:cleanup        # Clean expired records
 RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxx
 
 # Optional - Defaults work for local dev
-DATABASE_PATH=./data/hrisa-portfolio.db
+DATABASE_PATH=./data/janette-portfolio.db
 ADMIN_EMAIL=your@email.com
 BASE_URL=http://localhost:3000
 
@@ -243,7 +243,7 @@ RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxx
 ADMIN_EMAIL=your@email.com
 
 # Local development (optional, has defaults)
-DATABASE_PATH=./data/hrisa-portfolio.db
+DATABASE_PATH=./data/janette-portfolio.db
 BASE_URL=http://localhost:3000
 EOF
 ```
@@ -467,7 +467,7 @@ npm run db:stats
 
 Or query directly:
 ```bash
-sqlite3 data/hrisa-portfolio.db
+sqlite3 data/janette-portfolio.db
 
 .tables
 SELECT * FROM users;
@@ -492,7 +492,7 @@ SELECT * FROM audit_log ORDER BY created_at DESC LIMIT 10;
 **Solution:**
 1. Check user role in database:
    ```bash
-   sqlite3 data/hrisa-portfolio.db "SELECT * FROM users WHERE email='your@email.com';"
+   sqlite3 data/janette-portfolio.db "SELECT * FROM users WHERE email='your@email.com';"
    ```
 2. Role should be 'ADMIN' and status should be 'APPROVED'
 3. Run create-admin script again if needed
@@ -509,7 +509,7 @@ SELECT * FROM audit_log ORDER BY created_at DESC LIMIT 10;
 1. Stop any running dev servers
 2. Delete WAL files:
    ```bash
-   rm data/hrisa-portfolio.db-wal data/hrisa-portfolio.db-shm
+   rm data/janette-portfolio.db-wal data/janette-portfolio.db-shm
    ```
 3. Restart dev server
 
@@ -517,7 +517,7 @@ SELECT * FROM audit_log ORDER BY created_at DESC LIMIT 10;
 **Solution:**
 1. Check resource is actually protected:
    ```bash
-   sqlite3 data/hrisa-portfolio.db "SELECT * FROM protected_resources;"
+   sqlite3 data/janette-portfolio.db "SELECT * FROM protected_resources;"
    ```
 2. Verify resource_type and resource_id match exactly
 3. Check user role meets minimum requirement

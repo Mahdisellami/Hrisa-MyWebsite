@@ -27,9 +27,9 @@ async function testResend() {
     console.log(`\n📧 Attempting to send test email to: ${testEmail}`);
 
     const { data, error } = await resend.emails.send({
-      from: 'Hrisa Portfolio <onboarding@resend.dev>',
+      from: 'Janette <onboarding@resend.dev>',
       to: testEmail,
-      subject: 'Test Email from Hrisa Portfolio',
+      subject: 'Test Email from Janette',
       html: '<p>This is a test email to verify Resend API is working correctly.</p>',
     });
 

@@ -1,7 +1,7 @@
 {
-  "buildCommand": "cd hrisa-portfolio && npm run build",
-  "devCommand": "cd hrisa-portfolio && npm run dev",
-  "installCommand": "cd hrisa-portfolio && npm install",
-  "outputDirectory": "hrisa-portfolio/.next",
+  "buildCommand": "cd janette-portfolio && npm run build",
+  "devCommand": "cd janette-portfolio && npm run dev",
+  "installCommand": "cd janette-portfolio && npm install",
+  "outputDirectory": "janette-portfolio/.next",
   "framework": "nextjs"
 }

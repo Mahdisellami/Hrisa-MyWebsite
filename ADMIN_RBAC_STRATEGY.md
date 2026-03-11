@@ -136,7 +136,7 @@ The portfolio website will include an admin panel with Role-Based Access Control
 **Fields:**
 - Name*
 - Email*
-- Area of interest (dropdown: Hrisa Agents, Hrisa Code, Hrisa HR, Other)
+- Area of interest (dropdown: Janette Agents, Janette Code, Janette HR, Other)
 - Your role/background*
 - What you bring to the table*
 - Collaboration idea*
@@ -497,7 +497,7 @@ This is an automated message. Please don't reply to this email.
 ```
 ┌─────────────────────────────┐
 │                             │
-│    🌶️ Hrisa Admin Panel    │
+│    🌶️ Janette Admin Panel    │
 │                             │
 │  ┌───────────────────────┐ │
 │  │ Email                 │ │
@@ -515,7 +515,7 @@ This is an automated message. Please don't reply to this email.
 ### Dashboard
 ```
 ┌────────────────────────────────────────────┐
-│ Hrisa Admin  [Mahdi] [Logout]              │
+│ Janette Admin  [Mahdi] [Logout]              │
 ├────────────────────────────────────────────┤
 │ Sidebar:     │ Dashboard Overview          │
 │              │                             │

@@ -1,7 +1,7 @@
 # Internationalization (i18n) Strategy
 
 ## Overview
-The Hrisa Portfolio website will support 5 languages, reflecting your multicultural background and expanding reach to diverse audiences.
+The Janette website will support 5 languages, reflecting your multicultural background and expanding reach to diverse audiences.
 
 ## Supported Languages
 
@@ -531,13 +531,13 @@ export async function generateMetadata({ params: { locale } }: Props) {
     title: messages.Meta.title,
     description: messages.Meta.description,
     alternates: {
-      canonical: `https://hrisa.com/${locale}`,
+      canonical: `https://janette.technology/${locale}`,
       languages: {
-        'en': 'https://hrisa.com/en',
-        'de': 'https://hrisa.com/de',
-        'fr': 'https://hrisa.com/fr',
-        'es': 'https://hrisa.com/es',
-        'ar': 'https://hrisa.com/ar',
+        'en': 'https://janette.technology/en',
+        'de': 'https://janette.technology/de',
+        'fr': 'https://janette.technology/fr',
+        'es': 'https://janette.technology/es',
+        'ar': 'https://janette.technology/ar',
       },
     },
     openGraph: {
@@ -550,12 +550,12 @@ export async function generateMetadata({ params: { locale } }: Props) {
 
 ### Hreflang Tags (Automatic with next-intl)
 ```html
-<link rel="alternate" hreflang="en" href="https://hrisa.com/en" />
-<link rel="alternate" hreflang="de" href="https://hrisa.com/de" />
-<link rel="alternate" hreflang="fr" href="https://hrisa.com/fr" />
-<link rel="alternate" hreflang="es" href="https://hrisa.com/es" />
-<link rel="alternate" hreflang="ar" href="https://hrisa.com/ar" />
-<link rel="alternate" hreflang="x-default" href="https://hrisa.com/en" />
+<link rel="alternate" hreflang="en" href="https://janette.technology/en" />
+<link rel="alternate" hreflang="de" href="https://janette.technology/de" />
+<link rel="alternate" hreflang="fr" href="https://janette.technology/fr" />
+<link rel="alternate" hreflang="es" href="https://janette.technology/es" />
+<link rel="alternate" hreflang="ar" href="https://janette.technology/ar" />
+<link rel="alternate" hreflang="x-default" href="https://janette.technology/en" />
 ```
 
 ## Content Translation Strategy
@@ -596,11 +596,11 @@ export const professionalProjects = {
 
 ### With Locale Prefix
 ```
-https://hrisa.com/en/professional
-https://hrisa.com/de/professional
-https://hrisa.com/fr/professional
-https://hrisa.com/es/professional
-https://hrisa.com/ar/professional
+https://janette.technology/en/professional
+https://janette.technology/de/professional
+https://janette.technology/fr/professional
+https://janette.technology/es/professional
+https://janette.technology/ar/professional
 ```
 
 ### Root Redirect

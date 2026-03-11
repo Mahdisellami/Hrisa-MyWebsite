@@ -24,7 +24,7 @@ export interface SessionUser {
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
 }
 
-const SESSION_COOKIE_NAME = 'hrisa_session';
+const SESSION_COOKIE_NAME = 'janette_session';
 const SESSION_DURATION = 24 * 60 * 60; // 24 hours in seconds (reduced from 7 days)
 const SESSION_INACTIVITY_TIMEOUT = 2 * 60 * 60; // 2 hours inactivity timeout
 

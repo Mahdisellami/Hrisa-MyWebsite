@@ -2,7 +2,7 @@
 
 import { initializeSchema, getDatabaseStats } from '../lib/db/index.js';
 
-console.log('🚀 Initializing Hrisa Portfolio Database...\n');
+console.log('🚀 Initializing Janette Database...\n');
 
 async function initialize() {
   try {

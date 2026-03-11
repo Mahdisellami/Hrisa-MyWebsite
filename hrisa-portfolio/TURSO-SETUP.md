@@ -31,7 +31,7 @@ This opens your browser for authentication.
 
 ```bash
 # Create in Tokyo region (closest to your users)
-turso db create hrisa-portfolio --location nrt
+turso db create janette-portfolio --location nrt
 ```
 
 **Other regions:**
@@ -45,14 +45,14 @@ turso db create hrisa-portfolio --location nrt
 
 **Get Database URL:**
 ```bash
-turso db show hrisa-portfolio --url
+turso db show janette-portfolio --url
 ```
 
-Output example: `libsql://hrisa-portfolio-your-org.turso.io`
+Output example: `libsql://janette-portfolio-your-org.turso.io`
 
 **Create Auth Token:**
 ```bash
-turso db tokens create hrisa-portfolio
+turso db tokens create janette-portfolio
 ```
 
 Output example: `eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9...`
@@ -65,7 +65,7 @@ Output example: `eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9...`
 
 ```bash
 # Open database shell
-turso db shell hrisa-portfolio
+turso db shell janette-portfolio
 
 # Copy entire content from lib/db/schema.sql
 # Paste into shell
@@ -79,7 +79,7 @@ turso db shell hrisa-portfolio
 
 ```bash
 # Set environment variables
-export TURSO_DATABASE_URL="libsql://hrisa-portfolio-your-org.turso.io"
+export TURSO_DATABASE_URL="libsql://janette-portfolio-your-org.turso.io"
 export TURSO_AUTH_TOKEN="your-token-here"
 
 # Run initialization
@@ -97,13 +97,13 @@ npm run create:admin -- --email=noreply@hrisa.tech
 
 ```bash
 # List all tables
-turso db shell hrisa-portfolio ".tables"
+turso db shell janette-portfolio ".tables"
 
 # Should show:
 # audit_log  magic_links  protected_resources  sessions  share_links  users
 
 # Check users
-turso db shell hrisa-portfolio "SELECT email, role, status FROM users;"
+turso db shell janette-portfolio "SELECT email, role, status FROM users;"
 
 # Should show your admin user
 ```
@@ -137,27 +137,27 @@ turso db list
 
 **View database info:**
 ```bash
-turso db show hrisa-portfolio
+turso db show janette-portfolio
 ```
 
 **Open database shell:**
 ```bash
-turso db shell hrisa-portfolio
+turso db shell janette-portfolio
 ```
 
 **Run SQL query:**
 ```bash
-turso db shell hrisa-portfolio "SELECT COUNT(*) FROM users;"
+turso db shell janette-portfolio "SELECT COUNT(*) FROM users;"
 ```
 
 **Create new auth token:**
 ```bash
-turso db tokens create hrisa-portfolio
+turso db tokens create janette-portfolio
 ```
 
 **Delete database (careful!):**
 ```bash
-turso db destroy hrisa-portfolio
+turso db destroy janette-portfolio
 ```
 
 ---

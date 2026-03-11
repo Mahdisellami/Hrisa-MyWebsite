@@ -163,7 +163,7 @@ export default function ShareLinksPage() {
                     type="text"
                     value={resourceId}
                     onChange={(e) => setResourceId(e.target.value)}
-                    placeholder="e.g., mahdi-sellami, hrisa-code"
+                    placeholder="e.g., mahdi-sellami, janette-code"
                     className="w-full px-4 py-2 border-2 border-sand-300 rounded-lg focus:outline-none focus:border-brand-500"
                   />
                 </div>

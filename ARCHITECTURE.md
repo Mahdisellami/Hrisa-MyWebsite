@@ -1,4 +1,4 @@
-# Hrisa Portfolio Website - Architecture & Conception
+# Janette Website - Architecture & Conception
 
 ## Project Overview
 A personal portfolio website showcasing professional career, IT projects, and creative hobbies. **Strategic positioning**: Subtle emphasis on freelance availability and entrepreneurial mindset, showcasing production-ready work and startup ideas to attract potential clients and collaborators.
